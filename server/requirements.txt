@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+sqlalchemy
+asyncpg
+databases
+pydantic
+pydantic-settings
+python-multipart
+celery[redis]
+minio
+httpx
+python-dotenv
+# Removed paddlepaddle and paddleocr as we use Baidu Cloud API
