@@ -7,12 +7,14 @@ from jose import jwt
 from passlib.context import CryptContext
 
 
+from core.config import settings
+
 # Encryption Configuration
 PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
 ALGORITHM = "HS256"
 
-# Load secret directly from env or use a default for dev
-SECRET_KEY = os.getenv("SECRET_KEY", "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7")
+# Load secret from settings
+SECRET_KEY = settings.SECRET_KEY
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 

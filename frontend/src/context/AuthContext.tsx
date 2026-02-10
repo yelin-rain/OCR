@@ -10,7 +10,7 @@ interface User {
 interface AuthContextType {
     user: User | null;
     loading: boolean;
-    login: (token: string) => void;
+    login: (token: string) => Promise<void>;
     logout: () => void;
 }
 
@@ -40,15 +40,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }, []);
 
-    const login = (token: string) => {
+    const login = async (token: string) => {
         localStorage.setItem('token', token);
         // Fetch user immediately after setting token
-        axios.get('http://localhost:8000/auth/me', {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(response => {
-                setUser(response.data);
+        try {
+            const response = await axios.get('http://localhost:8000/auth/me', {
+                headers: { Authorization: `Bearer ${token}` }
             });
+            setUser(response.data);
+        } catch (error) {
+            console.error("Failed to fetch user profile", error);
+        }
     };
 
     const logout = () => {

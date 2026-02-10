@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from controllers import ocr_controller, auth_controller
-from models import user # Import to register table
+from models import User, OCRTask # This ensures all models are registered with Base.metadata
 from core.database import engine, Base
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager

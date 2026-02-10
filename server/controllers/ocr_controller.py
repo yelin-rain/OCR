@@ -1,10 +1,10 @@
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from typing import Annotated
-from models.user import User
+from models import User
 from controllers.auth_controller import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.database import get_db
-from models.task import OCRTask, TaskStatus
+from models import OCRTask, TaskStatus, User
 from schemas.task import TaskResponse
 from services.ocr_service import OCRService
 from tasks import process_ocr_task

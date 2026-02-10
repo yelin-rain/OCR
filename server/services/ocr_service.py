@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from models.task import OCRTask, TaskStatus
+from models import OCRTask, TaskStatus
 from schemas.task import TaskCreate, TaskResponse
 from providers.storage_provider import storage_provider
 from providers.baidu_provider import baidu_provider
@@ -90,8 +90,13 @@ class OCRService:
                     # 下载文件
                     file_data = storage_provider.download_file(task.file_path)
 
+                    # 预处理图片
+                    from core.image_processor import image_processor
+                    processed_data = image_processor.process_image(file_data)
+                    print(f"Image processed. Original size: {len(file_data)} bytes -> Processed: {len(processed_data)} bytes")
+
                     # 调用百度ocr
-                    api_result = await baidu_provider.ocr_general_basic(file_data)
+                    api_result = await baidu_provider.ocr_general_basic(processed_data)
                     
                     # 保存结果
                     task.result = json.dumps(api_result, ensure_ascii=False)

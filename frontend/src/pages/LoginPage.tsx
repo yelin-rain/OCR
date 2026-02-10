@@ -22,9 +22,8 @@ const LoginPage: React.FC = () => {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
 
-            // Wait for user context to update? We can improve this later.
-            // For now, assume login updates context async but we can navigate.
-            login(response.data.access_token);
+            // Wait for user context to update
+            await login(response.data.access_token);
             navigate('/dashboard');
         } catch (err: any) {
             setError('Login failed. Please check your credentials.');

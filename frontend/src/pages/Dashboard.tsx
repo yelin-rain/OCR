@@ -47,6 +47,8 @@ const Dashboard: React.FC = () => {
 
     useEffect(() => {
         fetchTasks();
+        const interval = setInterval(fetchTasks, 3000); // Poll every 3 seconds
+        return () => clearInterval(interval);
     }, []);
 
     if (loading) return <div className="text-center py-20 text-gray-500">Loading tasks...</div>;

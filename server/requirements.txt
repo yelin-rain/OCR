@@ -11,3 +11,4 @@ minio
 httpx
 python-dotenv
 # Removed paddlepaddle and paddleocr as we use Baidu Cloud API
+Pillow
