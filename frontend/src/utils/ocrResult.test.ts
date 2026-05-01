@@ -9,12 +9,13 @@ describe("parseOcrResult", () => {
 
   it("parses words_result format", () => {
     const input = JSON.stringify({
-      words_result: [{ words: "hello" }, { words: "world" }],
+      words_result: [{ words: "hello", probability: 0.9 }, { words: "world" }],
     });
-    expect(parseOcrResult(input)).toEqual({
-      type: "words",
-      words: ["hello", "world"],
-    });
+    const output = parseOcrResult(input);
+    expect(output.type).toBe("lines");
+    if (output.type === "lines") {
+      expect(output.lines.map((line) => line.words)).toEqual(["hello", "world"]);
+    }
   });
 
   it("parses ai studio markdown text format", () => {
@@ -23,18 +24,20 @@ describe("parseOcrResult", () => {
         layoutParsingResults: [{ markdown: { text: "line1\nline2" } }],
       },
     });
-    expect(parseOcrResult(input)).toEqual({
-      type: "text",
-      text: "line1\nline2",
-    });
+    const output = parseOcrResult(input);
+    expect(output.type).toBe("text");
+    if (output.type === "text") {
+      expect(output.text).toBe("line1\nline2");
+    }
   });
 
   it("falls back to full_text format", () => {
     const input = JSON.stringify({ full_text: "plain text content" });
-    expect(parseOcrResult(input)).toEqual({
-      type: "text",
-      text: "plain text content",
-    });
+    const output = parseOcrResult(input);
+    expect(output.type).toBe("text");
+    if (output.type === "text") {
+      expect(output.text).toBe("plain text content");
+    }
   });
 
   it("returns raw for unknown shape", () => {

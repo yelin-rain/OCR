@@ -1,5 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy import and_, or_
+from datetime import datetime, timedelta
 
 from app.models import OCRTask
 
@@ -43,3 +45,35 @@ class OCRTaskRepository:
     async def delete(self, task: OCRTask) -> None:
         await self.session.delete(task)
         await self.session.commit()
+
+    async def list_history_for_user(
+        self,
+        user_id: int,
+        keyword: str | None = None,
+        days: int = 7,
+        skip: int = 0,
+        limit: int = 50,
+    ) -> list[OCRTask]:
+        since = datetime.utcnow() - timedelta(days=max(1, days))
+        stmt = (
+            select(OCRTask)
+            .where(
+                and_(
+                    OCRTask.owner_id == user_id,
+                    OCRTask.created_at >= since,
+                )
+            )
+            .order_by(OCRTask.created_at.desc())
+            .offset(skip)
+            .limit(limit)
+        )
+        if keyword:
+            kw = f"%{keyword}%"
+            stmt = stmt.where(
+                or_(
+                    OCRTask.filename.ilike(kw),
+                    OCRTask.result.ilike(kw),
+                )
+            )
+        result = await self.session.execute(stmt)
+        return result.scalars().all()

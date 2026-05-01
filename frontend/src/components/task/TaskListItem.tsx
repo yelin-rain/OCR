@@ -34,19 +34,19 @@ export const TaskListItem: React.FC<TaskListItemProps> = ({
     <div
       onClick={() => onSelect(task)}
       className={cn(
-        "p-3 rounded-lg cursor-pointer transition-all hover:bg-gray-800 border flex items-center justify-between group",
+        "p-3 rounded-lg cursor-pointer transition-all hover:bg-gray-50 border flex items-center justify-between group",
         isSelected
-          ? "bg-gray-800 border-blue-500/50 shadow-lg shadow-blue-500/10"
-          : "bg-gray-900 border-transparent hover:border-gray-700",
+          ? "bg-blue-50 border-blue-300"
+          : "bg-white border-transparent hover:border-gray-200",
       )}
     >
       <div className="flex items-center gap-3 overflow-hidden">
-        <div className="p-2 rounded-lg bg-gray-950">
-          <ImageIcon className="w-5 h-5 text-gray-400" />
+        <div className="p-2 rounded-lg bg-gray-100">
+          <ImageIcon className="w-5 h-5 text-gray-500" />
         </div>
         <div className="min-w-0">
-          <p className="font-medium text-gray-200 truncate">{task.filename}</p>
-          <p className="text-xs text-gray-500">
+          <p className="font-medium text-gray-800 truncate">{task.filename}</p>
+          <p className="text-xs text-gray-400">
             {new Date(task.created_at).toLocaleTimeString()}
           </p>
         </div>

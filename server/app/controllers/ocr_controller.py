@@ -4,7 +4,7 @@ from app.controllers.auth_controller import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.models import TaskStatus, User
-from app.schemas.task import TaskResponse
+from app.schemas.task import TaskResponse, TaskCorrectionRequest
 from app.services.ocr_service import OCRService
 from tasks import process_ocr_task
 from app.providers.storage_provider import storage_provider
@@ -52,6 +52,26 @@ async def get_task(
     task = await _get_user_task_or_404(service, task_id, current_user.id)
     return _build_task_response(task)
 
+
+@router.get("/task/{task_id}/status")
+async def get_task_status(
+    task_id: int,
+    current_user: Annotated[User, Depends(get_current_user)],
+    db: AsyncSession = Depends(get_db)
+):
+    service = OCRService(db)
+    task = await _get_user_task_or_404(service, task_id, current_user.id)
+    celery_state = None
+    if task.celery_task_id:
+        from celery_worker import celery_app
+        celery_state = celery_app.AsyncResult(task.celery_task_id).state
+    return {
+        "task_id": task.id,
+        "status": task.status,
+        "celery_task_id": task.celery_task_id,
+        "celery_state": celery_state,
+    }
+
 @router.post("/task/{task_id}/stop")
 async def stop_ocr_task(
     task_id: int, 
@@ -80,6 +100,54 @@ async def list_tasks(
     service = OCRService(db)
     tasks = await service.list_tasks(skip, limit, current_user.id)
     return [_build_task_response(task) for task in tasks]
+
+
+@router.get("/history", response_model=list[TaskResponse])
+async def list_history(
+    current_user: Annotated[User, Depends(get_current_user)],
+    keyword: str | None = None,
+    days: int = 7,
+    skip: int = 0,
+    limit: int = 50,
+    db: AsyncSession = Depends(get_db),
+):
+    service = OCRService(db)
+    tasks = await service.list_user_history(
+        user_id=current_user.id,
+        keyword=keyword,
+        days=days,
+        skip=skip,
+        limit=limit,
+    )
+    return [_build_task_response(task) for task in tasks]
+
+
+@router.get("/analytics/dashboard")
+async def get_dashboard_analytics(
+    current_user: Annotated[User, Depends(get_current_user)],
+    days: int = 7,
+    db: AsyncSession = Depends(get_db),
+):
+    service = OCRService(db)
+    return await service.get_dashboard_analytics(current_user.id, days=days)
+
+
+@router.post("/task/{task_id}/correction", response_model=TaskResponse)
+async def save_task_correction(
+    task_id: int,
+    payload: TaskCorrectionRequest,
+    current_user: Annotated[User, Depends(get_current_user)],
+    db: AsyncSession = Depends(get_db),
+):
+    service = OCRService(db)
+    updated = await service.save_corrections(
+        task_id=task_id,
+        corrections=[item.model_dump() for item in payload.corrections],
+        user_id=current_user.id,
+    )
+    if not updated:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return _build_task_response(updated)
 
 @router.delete("/task/{task_id}")
 async def delete_ocr_task(

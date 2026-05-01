@@ -20,3 +20,10 @@ class UserResponse(UserBase):
 
     class Config:
         from_attributes = True
+
+
+class UserUpdate(BaseModel):
+    email: Optional[EmailStr] = None
+    username: Optional[str] = None
+    current_password: Optional[str] = None
+    new_password: Optional[str] = None

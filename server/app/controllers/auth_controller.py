@@ -11,7 +11,7 @@ from app.core.database import get_db
 from app.core.security import create_access_token, get_password_hash, verify_password, SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from app.models.user import User
 from app.schemas.auth import Token, TokenData
-from app.schemas.user import UserCreate, UserResponse
+from app.schemas.user import UserCreate, UserResponse, UserUpdate
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
@@ -75,4 +75,36 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
 
 @router.get("/me", response_model=UserResponse)
 async def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):
+    return current_user
+
+
+@router.put("/me", response_model=UserResponse)
+async def update_users_me(
+    payload: UserUpdate,
+    current_user: Annotated[User, Depends(get_current_user)],
+    db: AsyncSession = Depends(get_db),
+):
+    if payload.email and payload.email != current_user.email:
+        existing = await db.execute(select(User).where(User.email == payload.email, User.id != current_user.id))
+        if existing.scalars().first():
+            raise HTTPException(status_code=400, detail="Email already in use")
+        current_user.email = payload.email
+
+    if payload.username and payload.username != current_user.username:
+        existing = await db.execute(select(User).where(User.username == payload.username, User.id != current_user.id))
+        if existing.scalars().first():
+            raise HTTPException(status_code=400, detail="Username already in use")
+        current_user.username = payload.username
+
+    if payload.new_password is not None:
+        if not payload.current_password:
+            raise HTTPException(status_code=400, detail="Current password is required")
+        if not verify_password(payload.current_password, current_user.hashed_password):
+            raise HTTPException(status_code=400, detail="Current password is incorrect")
+        if len(payload.new_password) < 6:
+            raise HTTPException(status_code=400, detail="New password must be at least 6 characters")
+        current_user.hashed_password = get_password_hash(payload.new_password)
+
+    await db.commit()
+    await db.refresh(current_user)
     return current_user

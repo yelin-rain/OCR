@@ -9,6 +9,8 @@ import { OCRController } from "./controllers/OCRController";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import Dashboard from "./pages/Dashboard";
+import UserHistoryPage from "./pages/UserHistoryPage";
+import UserProfilePage from "./pages/UserProfilePage";
 import Layout from "./components/Layout";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -34,6 +36,22 @@ function App() {
               element={
                 <PrivateRoute>
                   <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="user/history"
+              element={
+                <PrivateRoute>
+                  <UserHistoryPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="user/profile"
+              element={
+                <PrivateRoute>
+                  <UserProfilePage />
                 </PrivateRoute>
               }
             />

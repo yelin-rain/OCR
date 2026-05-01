@@ -56,12 +56,12 @@ export const OCRController: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10 space-y-10">
-      <section>
+    <div className="max-w-7xl mx-auto px-2 h-[calc(100vh-170px)] flex flex-col gap-4 overflow-hidden">
+      <section className="shrink-0">
         <FileUpload onUpload={handleUpload} />
       </section>
 
-      <section>
+      <section className="flex-1 min-h-0">
         <TaskList
           tasks={tasks}
           selectedTask={selectedTask}

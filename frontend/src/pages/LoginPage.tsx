@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { httpClient } from "../providers/http_provider";
 import { useAuth } from "../context/AuthContext";
 import { Lock, User } from "lucide-react";
@@ -31,43 +31,44 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a] text-white">
-      <div className="bg-gray-900 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-800">
-        <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900 px-4">
+      <div className="bg-white p-8 rounded-xl shadow-sm w-full max-w-md border border-gray-200">
+        <h2 className="text-3xl font-bold mb-2 text-center text-gray-900">
           Login
         </h2>
+        <p className="text-center text-sm text-gray-500 mb-6">使用你的账号继续</p>
         {error && (
-          <div className="bg-red-500/10 border border-red-500 text-red-500 p-3 rounded mb-4 text-sm">
+          <div className="bg-red-50 border border-red-200 text-red-700 p-3 rounded mb-4 text-sm">
             {error}
           </div>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">
+            <label className="block text-sm font-medium text-gray-600 mb-1">
               Username
             </label>
             <div className="relative">
-              <User className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
+              <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full bg-white border border-gray-300 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:border-blue-500 transition-colors"
                 required
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">
+            <label className="block text-sm font-medium text-gray-600 mb-1">
               Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
+              <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full bg-white border border-gray-300 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:border-blue-500 transition-colors"
                 required
               />
             </div>
@@ -81,9 +82,9 @@ const LoginPage: React.FC = () => {
         </form>
         <div className="mt-4 text-center text-sm text-gray-500">
           Don't have an account?{" "}
-          <a href="/register" className="text-blue-400 hover:underline">
+          <Link to="/register" className="text-blue-600 hover:underline">
             Register
-          </a>
+          </Link>
         </div>
       </div>
     </div>

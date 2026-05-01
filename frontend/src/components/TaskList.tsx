@@ -20,11 +20,11 @@ export const TaskList: React.FC<TaskListProps> = ({
   onDeleteTask,
 }) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full min-h-0">
       {/* List */}
-      <div className="col-span-1 bg-gray-900/50 rounded-xl border border-gray-700 overflow-hidden flex flex-col">
-        <div className="p-4 border-b border-gray-700 bg-gray-900/80 backdrop-blur">
-          <h2 className="text-lg font-semibold text-gray-100 flex items-center gap-2">
+      <div className="col-span-1 bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col">
+        <div className="p-4 border-b border-gray-200 bg-gray-50">
+          <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
             <FileText className="w-5 h-5 text-blue-400" />
             历史任务
           </h2>
@@ -44,7 +44,7 @@ export const TaskList: React.FC<TaskListProps> = ({
       </div>
 
       {/* Detail View */}
-      <div className="col-span-1 lg:col-span-2 bg-gray-900/50 rounded-xl border border-gray-700 overflow-hidden flex flex-col">
+      <div className="col-span-1 lg:col-span-2 bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col">
         <TaskDetailPanel task={selectedTask} />
       </div>
     </div>

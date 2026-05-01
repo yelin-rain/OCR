@@ -47,10 +47,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onUpload }) => {
     <div
       {...getRootProps()}
       className={cn(
-        "border-2 border-dashed rounded-xl p-10 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center gap-4 group",
+        "border-2 border-dashed rounded-xl p-6 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center gap-3 group",
         isDragActive
-          ? "border-blue-500 bg-blue-500/10 scale-[1.02]"
-          : "border-gray-600 hover:border-blue-400 hover:bg-gray-800/50 bg-gray-900/50",
+          ? "border-blue-500 bg-blue-50 scale-[1.02]"
+          : "border-gray-300 hover:border-blue-400 hover:bg-blue-50/40 bg-white",
       )}
     >
       <input {...getInputProps()} />
@@ -63,24 +63,24 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onUpload }) => {
           )}
         >
           {uploading ? (
-            <Loader2 className="w-8 h-8 animate-spin" />
+            <Loader2 className="w-7 h-7 animate-spin" />
           ) : (
-            <Upload className="w-8 h-8" />
+            <Upload className="w-7 h-7" />
           )}
         </div>
       </div>
 
       <div className="text-center space-y-2">
-        <h3 className="text-lg font-semibold text-gray-200">
+        <h3 className="text-base font-semibold text-gray-800">
           {uploading ? "正在上传..." : "点击或拖拽图片到此处"}
         </h3>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-gray-500">
           {uploading ? `${progress}%` : "支持 JPG, PNG, BMP 格式"}
         </p>
       </div>
 
       {uploading && (
-        <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden mt-4 max-w-xs">
+        <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden mt-4 max-w-xs">
           <div
             className="h-full bg-blue-500 transition-all duration-300"
             style={{ width: `${progress}%` }}

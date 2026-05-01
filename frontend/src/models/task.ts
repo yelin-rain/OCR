@@ -4,6 +4,12 @@ export interface Task {
     status: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
     created_at: string;
     result: string | null;
+    correction_log?: string | null;
+    model_version?: string | null;
+    inference_ms?: number | null;
+    avg_confidence?: number | null;
+    image_width?: number | null;
+    image_height?: number | null;
     file_url?: string;
     celery_task_id?: string;
 }

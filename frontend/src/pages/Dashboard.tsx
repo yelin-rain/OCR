@@ -43,21 +43,21 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <header className="flex justify-between items-end pb-6 border-b border-gray-800">
+      <header className="flex justify-between items-end pb-6 border-b border-gray-200">
         <div>
-          <h2 className="text-3xl font-bold text-white">
+          <h2 className="text-3xl font-bold text-gray-900">
             Welcome back, {user?.username}
           </h2>
-          <p className="text-gray-500 mt-2">
+          <p className="text-gray-600 mt-2">
             Manage your recent OCR operations
           </p>
         </div>
       </header>
 
       {tasks.length === 0 ? (
-        <div className="text-center py-20 bg-gray-900/50 rounded-xl border border-gray-800">
-          <FileText className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-          <h3 className="text-xl font-medium text-gray-300">No tasks found</h3>
+        <div className="text-center py-20 bg-white rounded-xl border border-gray-200">
+          <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-xl font-medium text-gray-700">No tasks found</h3>
           <p className="text-gray-500 mt-2">Upload a document to get started</p>
         </div>
       ) : (
@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
           {tasks.map((task) => (
             <div
               key={task.id}
-              className="bg-gray-900 p-4 rounded-xl border border-gray-800 flex items-center justify-between hover:border-gray-700 transition-colors"
+              className="bg-white p-4 rounded-xl border border-gray-200 flex items-center justify-between hover:border-gray-300 transition-colors"
             >
               <div className="flex items-center gap-4">
                 <div
@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
                   <FileText className="w-6 h-6" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-white">{task.filename}</h4>
+                  <h4 className="font-medium text-gray-800">{task.filename}</h4>
                   <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
                     <span className="flex items-center gap-1">
                       <Clock className="w-3 h-3" />
@@ -101,7 +101,7 @@ const Dashboard: React.FC = () => {
                     href={task.file_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+                    className="p-2 text-gray-400 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
                     title="View Source"
                   >
                     <Eye className="w-4 h-4" />

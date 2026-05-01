@@ -14,6 +14,10 @@ python-dotenv
 paddlepaddle
 paddleocr
 Pillow
+scikit-image
+albumentations==1.3.1
+qudida
+scikit-learn
 python-jose[cryptography]
 passlib[bcrypt]
 bcrypt==4.0.1

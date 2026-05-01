@@ -12,6 +12,7 @@ from PIL import Image
 import io
 import shutil
 import tempfile
+import subprocess
 import paddle
 from paddleocr import PaddleOCR
 from app.core.config import settings
@@ -23,6 +24,8 @@ class LocalOCRProvider:
         # We'll copy the models to a temp ASCII path if the original path contains non-ASCII characters.
         self.det_dir = self._prepare_model_dir(settings.DET_MODEL_DIR, "det") if settings.USE_LOCAL_MODELS else None
         self.rec_dir = self._prepare_model_dir(settings.REC_MODEL_DIR, "rec") if settings.USE_LOCAL_MODELS else None
+        if settings.USE_LOCAL_MODELS:
+            self.det_dir, self.rec_dir = self._validate_local_model_pair(self.det_dir, self.rec_dir)
 
         if settings.USE_LOCAL_MODELS:
             print(f"Attempting to load local models from: {self.det_dir} and {self.rec_dir}")
@@ -82,6 +85,76 @@ class LocalOCRProvider:
             else:
                 raise e
 
+    def _validate_local_model_pair(self, det_dir: str | None, rec_dir: str | None) -> tuple[str | None, str | None]:
+        if not det_dir or not rec_dir:
+            print("Local model path is missing, fallback to official models.")
+            return None, None
+
+        det_ok, det_msg = self._validate_model_dir(det_dir)
+        rec_ok, rec_msg = self._validate_model_dir(rec_dir)
+        if det_ok and rec_ok:
+            return det_dir, rec_dir
+
+        print("Local models are not usable, fallback to official models.")
+        if not det_ok:
+            print(f"Detection model invalid: {det_msg}")
+        if not rec_ok:
+            print(f"Recognition model invalid: {rec_msg}")
+        return None, None
+
+    def _validate_model_dir(self, model_dir: str) -> tuple[bool, str]:
+        pdmodel = os.path.join(model_dir, "inference.pdmodel")
+        pdiparams = os.path.join(model_dir, "inference.pdiparams")
+        if not os.path.exists(pdmodel):
+            return False, f"missing file: {pdmodel}"
+        if not os.path.exists(pdiparams):
+            return False, f"missing file: {pdiparams}"
+
+        # Run predictor creation in a child process to avoid crashing the main process.
+        check_cmd = [
+            sys.executable,
+            "-c",
+            (
+                "import paddle.inference as I; "
+                f"cfg=I.Config(r'{pdmodel}', r'{pdiparams}'); "
+                "cfg.disable_gpu(); "
+                "I.create_predictor(cfg); "
+                "print('ok')"
+            ),
+        ]
+        try:
+            proc = subprocess.run(
+                check_cmd,
+                capture_output=True,
+                text=True,
+                timeout=20,
+                check=False,
+            )
+            if proc.returncode != 0:
+                stderr = (proc.stderr or "").strip()
+                return False, f"predictor create failed: {stderr or 'unknown error'}"
+            return True, "ok"
+        except Exception as e:
+            return False, str(e)
+
+    def _has_required_infer_files(self, model_dir: str) -> tuple[bool, str]:
+        """Fast file-level guard: local model is usable only with pdmodel + pdiparams."""
+        if not model_dir or not os.path.isdir(model_dir):
+            return False, f"missing directory: {model_dir}"
+        pdmodel = os.path.join(model_dir, "inference.pdmodel")
+        pdiparams = os.path.join(model_dir, "inference.pdiparams")
+        if not os.path.isfile(pdmodel):
+            return False, f"missing file: {pdmodel}"
+        if not os.path.isfile(pdiparams):
+            info_file = os.path.join(model_dir, "inference.pdiparams.info")
+            if os.path.isfile(info_file):
+                return False, (
+                    f"missing file: {pdiparams} (found {info_file}; "
+                    "this is metadata only, official inference needs real .pdiparams)"
+                )
+            return False, f"missing file: {pdiparams}"
+        return True, "ok"
+
     def _prepare_model_dir(self, original_dir: str, prefix: str) -> str:
         """
         Check if the path contains non-ASCII characters. If so, copy to a temp ASCII path.
@@ -92,9 +165,11 @@ class LocalOCRProvider:
         # Check for non-ASCII
         try:
             original_dir.encode('ascii')
-            # If successful, check for files
-            if os.path.exists(os.path.join(original_dir, "inference.pdmodel")):
+            # Fast reject when inference.pdiparams is missing (including only .info case)
+            ok, reason = self._has_required_infer_files(original_dir)
+            if ok:
                 return original_dir
+            print(f"Local {prefix} model not ready, will fallback to official: {reason}")
             return None
         except UnicodeEncodeError:
             # Contains non-ASCII, copy to temp
@@ -112,19 +187,34 @@ class LocalOCRProvider:
                     if not os.path.exists(d) or os.path.getsize(s) != os.path.getsize(d):
                         shutil.copy2(s, d)
             
-            return target_dir if os.path.exists(os.path.join(target_dir, "inference.pdmodel")) else None
+            ok, reason = self._has_required_infer_files(target_dir)
+            if ok:
+                return target_dir
+            print(f"Local {prefix} model not ready after copy, will fallback to official: {reason}")
+            return None
 
-    def _extract_texts_from_result(self, result: Any) -> tuple[list[str], list[float]]:
+    def _normalize_box(self, box: Any) -> list[list[float]] | None:
+        if not isinstance(box, (list, tuple)):
+            return None
+        normalized: list[list[float]] = []
+        for pt in box:
+            if isinstance(pt, (list, tuple)) and len(pt) >= 2:
+                try:
+                    normalized.append([float(pt[0]), float(pt[1])])
+                except (TypeError, ValueError):
+                    return None
+        return normalized if normalized else None
+
+    def _extract_lines_from_result(self, result: Any) -> list[Dict[str, Any]]:
         """
         Normalize PaddleOCR outputs from different versions:
         - PaddleOCR 3.x: [OCRResult], OCRResult contains rec_texts/rec_scores
         - PaddleOCR 2.x legacy: [[(box, (text, score)), ...]]
         """
-        extracted_texts: list[str] = []
-        rec_scores: list[float] = []
+        lines: list[Dict[str, Any]] = []
 
         if not result:
-            return extracted_texts, rec_scores
+            return lines
 
         first_item = result[0]
 
@@ -132,12 +222,30 @@ class LocalOCRProvider:
         if hasattr(first_item, "get"):
             texts = first_item.get("rec_texts", []) or []
             scores = first_item.get("rec_scores", []) or []
-            extracted_texts = [str(t) for t in texts if t is not None and str(t).strip()]
-            rec_scores = [float(s) for s in scores[: len(extracted_texts)]]
-            # If score list length mismatches, pad with 1.0
-            if len(rec_scores) < len(extracted_texts):
-                rec_scores.extend([1.0] * (len(extracted_texts) - len(rec_scores)))
-            return extracted_texts, rec_scores
+            # In PaddleOCR 3.x, detection polygons are commonly exposed as rec_polys/dt_polys.
+            polys = (
+                first_item.get("rec_polys")
+                or first_item.get("dt_polys")
+                or first_item.get("rec_boxes")
+                or []
+            )
+            for idx, text_raw in enumerate(texts):
+                text = str(text_raw).strip() if text_raw is not None else ""
+                if not text:
+                    continue
+                score = 1.0
+                if idx < len(scores):
+                    try:
+                        score = float(scores[idx])
+                    except (TypeError, ValueError):
+                        score = 1.0
+                item: Dict[str, Any] = {"words": text, "probability": score}
+                if idx < len(polys):
+                    box = self._normalize_box(polys[idx])
+                    if box:
+                        item["location"] = box
+                lines.append(item)
+            return lines
 
         # PaddleOCR 2.x legacy structure
         if (
@@ -151,12 +259,60 @@ class LocalOCRProvider:
                     text = line[1][0]
                     score = line[1][1]
                     if text is not None and str(text).strip():
-                        extracted_texts.append(str(text))
-                        rec_scores.append(float(score))
+                        item: Dict[str, Any] = {
+                            "words": str(text),
+                            "probability": float(score),
+                        }
+                        box = self._normalize_box(line[0])
+                        if box:
+                            item["location"] = box
+                        lines.append(item)
                 except (IndexError, TypeError, ValueError):
                     continue
 
-        return extracted_texts, rec_scores
+        return lines
+
+    def _build_feature_map(
+        self,
+        words_result: list[Dict[str, Any]],
+        image_width: int,
+        image_height: int,
+        grid_size: int = 32,
+    ) -> list[list[float]]:
+        """
+        Approximate attention/feature heatmap using detection polygons weighted by confidence.
+        This serves as a practical visualization when direct internal CBAM tensors are unavailable.
+        """
+        heat = np.zeros((grid_size, grid_size), dtype=np.float32)
+        if image_width <= 0 or image_height <= 0:
+            return heat.tolist()
+        for item in words_result:
+            box = item.get("location")
+            if not box:
+                continue
+            try:
+                xs = [float(p[0]) for p in box]
+                ys = [float(p[1]) for p in box]
+                l = max(0.0, min(xs))
+                r = min(float(image_width), max(xs))
+                t = max(0.0, min(ys))
+                b = min(float(image_height), max(ys))
+                if r <= l or b <= t:
+                    continue
+                gx0 = int((l / image_width) * grid_size)
+                gx1 = int(np.ceil((r / image_width) * grid_size))
+                gy0 = int((t / image_height) * grid_size)
+                gy1 = int(np.ceil((b / image_height) * grid_size))
+                gx0, gy0 = max(gx0, 0), max(gy0, 0)
+                gx1, gy1 = min(gx1, grid_size), min(gy1, grid_size)
+                w = float(item.get("probability", 1.0))
+                heat[gy0:gy1, gx0:gx1] += max(0.05, w)
+            except Exception:
+                continue
+        m = float(heat.max())
+        if m > 0:
+            heat /= m
+        return heat.tolist()
 
     async def ocr_general_basic(self, image_bytes: bytes) -> Dict[str, Any]:
         """
@@ -166,9 +322,9 @@ class LocalOCRProvider:
             # Convert bytes to numpy array for PaddleOCR
             image = Image.open(io.BytesIO(image_bytes)).convert('RGB')
             image_np = np.array(image)
+            image_width, image_height = int(image.width), int(image.height)
 
-            extracted_texts = []
-            rec_scores = []
+            words_result: list[Dict[str, Any]] = []
 
             try:
                 if hasattr(self.ocr, "predict"):
@@ -178,7 +334,7 @@ class LocalOCRProvider:
                     print("Using traditional PaddleOCR ocr API...")
                     result = self.ocr.ocr(image_np)
 
-                extracted_texts, rec_scores = self._extract_texts_from_result(result)
+                words_result = self._extract_lines_from_result(result)
             except Exception as e:
                 print(f"Primary OCR API failed ({type(e).__name__}: {e}), trying alternative...")
                 try:
@@ -186,30 +342,33 @@ class LocalOCRProvider:
                         result = self.ocr.ocr(image_np)
                     else:
                         result = self.ocr.predict(image_np)
-                    extracted_texts, rec_scores = self._extract_texts_from_result(result)
+                    words_result = self._extract_lines_from_result(result)
                 except Exception as final_e:
                     print(f"Final OCR fallback failed: {final_e}")
                     raise final_e
 
-            if not extracted_texts:
+            if not words_result:
                 print("OCR Result: No text found")
-                return {"words_result": [], "full_text": ""}
+                return {
+                    "words_result": [],
+                    "feature_map": [],
+                    "full_text": "",
+                    "model_version": "local-PP-OCRv4",
+                }
 
-            words_result = []
-            for text, score in zip(extracted_texts, rec_scores):
-                words_result.append({
-                    "words": text,
-                    "probability": float(score)
-                })
-
-            full_text = "\n".join(extracted_texts)
+            full_text = "\n".join(
+                [str(item.get("words", "")).strip() for item in words_result if item.get("words")]
+            )
             print("--- OCR Result Start ---")
             print(full_text)
             print("--- OCR Result End ---")
 
             return {
                 "words_result": words_result,
-                "full_text": full_text
+                "dt_boxes": [item["location"] for item in words_result if "location" in item],
+                "feature_map": self._build_feature_map(words_result, image_width, image_height),
+                "full_text": full_text,
+                "model_version": "local-PP-OCRv4",
             }
         except Exception as e:
             print(f"Local OCR Error during inference: {e}")
