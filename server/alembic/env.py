@@ -18,10 +18,9 @@ if config.config_file_name is not None:
 import sys
 import os
 sys.path.append(os.getcwd())
-from core.database import Base
-from core.config import settings
+from app.core.database import Base
+from app.core.config import settings
 # Import models so they are registered in Base.metadata
-from models.task import OCRTask
 
 target_metadata = Base.metadata
 

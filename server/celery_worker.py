@@ -1,5 +1,11 @@
+import os
+# Force disable problematic features in Paddle 3.0 BEFORE anything else
+os.environ["FLAGS_enable_pir_api"] = "0"
+os.environ["FLAGS_use_mkldnn"] = "0"
+os.environ["FLAGS_enable_onednn"] = "0"
+
 from celery import Celery
-from core.config import settings
+from app.core.config import settings
 
 celery_app = Celery(
     "ocr_worker",

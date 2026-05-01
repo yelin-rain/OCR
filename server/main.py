@@ -1,15 +1,16 @@
 from fastapi import FastAPI
-from controllers import ocr_controller, auth_controller
-from models import User, OCRTask # This ensures all models are registered with Base.metadata
-from core.database import engine, Base
+from app.controllers import ocr_controller, auth_controller
+from app.core.database import engine, Base
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Create tables on startup
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+    except Exception:
+        pass
     yield
 
 app = FastAPI(title="OCR System API", lifespan=lifespan)

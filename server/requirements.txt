@@ -10,5 +10,11 @@ celery[redis]
 minio
 httpx
 python-dotenv
-# Removed paddlepaddle and paddleocr as we use Baidu Cloud API
+# Local PaddleOCR
+paddlepaddle
+paddleocr
 Pillow
+python-jose[cryptography]
+passlib[bcrypt]
+bcrypt==4.0.1
+email-validator

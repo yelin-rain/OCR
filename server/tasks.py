@@ -1,5 +1,5 @@
 from celery_worker import celery_app
-from services.ocr_service import OCRService
+from app.services.ocr_service import OCRService
 import asyncio
 
 @celery_app.task(bind=True)

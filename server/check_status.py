@@ -1,6 +1,6 @@
 import asyncio
-from core.database import AsyncSessionLocal
-from models.task import OCRTask
+from app.core.database import AsyncSessionLocal
+from app.models import OCRTask
 from sqlalchemy.future import select
 
 async def check():

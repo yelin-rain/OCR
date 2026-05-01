@@ -1,0 +1,45 @@
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+
+from app.models import OCRTask
+
+
+class OCRTaskRepository:
+    def __init__(self, session: AsyncSession):
+        self.session = session
+
+    async def create(self, task: OCRTask) -> OCRTask:
+        self.session.add(task)
+        await self.session.commit()
+        await self.session.refresh(task)
+        return task
+
+    async def get_by_id(self, task_id: int) -> OCRTask | None:
+        result = await self.session.execute(select(OCRTask).where(OCRTask.id == task_id))
+        return result.scalars().first()
+
+    async def get_by_id_for_user(self, task_id: int, user_id: int) -> OCRTask | None:
+        result = await self.session.execute(
+            select(OCRTask).where(OCRTask.id == task_id, OCRTask.owner_id == user_id)
+        )
+        return result.scalars().first()
+
+    async def list_for_user(self, user_id: int, skip: int = 0, limit: int = 20) -> list[OCRTask]:
+        result = await self.session.execute(
+            select(OCRTask)
+            .where(OCRTask.owner_id == user_id)
+            .order_by(OCRTask.created_at.desc())
+            .offset(skip)
+            .limit(limit)
+        )
+        return result.scalars().all()
+
+    async def list_all(self, skip: int = 0, limit: int = 20) -> list[OCRTask]:
+        result = await self.session.execute(
+            select(OCRTask).order_by(OCRTask.created_at.desc()).offset(skip).limit(limit)
+        )
+        return result.scalars().all()
+
+    async def delete(self, task: OCRTask) -> None:
+        await self.session.delete(task)
+        await self.session.commit()
