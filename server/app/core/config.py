@@ -1,6 +1,9 @@
 import os
 from pydantic_settings import BaseSettings
 
+_SERVER_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
 class Settings(BaseSettings):
     # Database
     POSTGRES_USER: str = "ocr_user"
@@ -49,6 +52,15 @@ class Settings(BaseSettings):
 
     # Security
     SECRET_KEY: str = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+
+    # Monitoring / backup / logs（路径相对 server 根目录）
+    DATA_BACKUP_DIR: str = os.path.join(_SERVER_ROOT, "backups")
+    APP_LOG_DIR: str = os.path.join(_SERVER_ROOT, "logs")
+    APP_LOG_FILE: str = os.path.join(_SERVER_ROOT, "logs", "app.log")
+
+    # 业务监控：识别结果 JSON 定时备份目录；单条 OCR 推理超时（秒）
+    OCR_RESULTS_JSON_BACKUP_DIR: str = os.path.join(_SERVER_ROOT, "backups", "ocr_json_daily")
+    OCR_INFERENCE_TIMEOUT_SEC: float = 300.0
 
     @property
     def REDIS_URL(self):

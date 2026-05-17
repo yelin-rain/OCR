@@ -1,11 +1,14 @@
-from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
+from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, Request
 from typing import Annotated
+import time
+
 from app.controllers.auth_controller import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.models import TaskStatus, User
 from app.schemas.task import TaskResponse, TaskCorrectionRequest
 from app.services.ocr_service import OCRService
+from app.services.business_monitor_service import BusinessMonitorService
 from tasks import process_ocr_task
 from app.providers.storage_provider import storage_provider
 import json
@@ -16,6 +19,14 @@ router = APIRouter(prefix="/ocr", tags=["ocr"])
 def _build_task_response(task) -> TaskResponse:
     response = TaskResponse.model_validate(task)
     response.file_url = storage_provider.get_file_url(task.file_path)
+    if task.result:
+        try:
+            payload = json.loads(task.result)
+            if isinstance(payload, dict):
+                response.original_text = payload.get("original_text")
+                response.processed_text = payload.get("processed_text")
+        except json.JSONDecodeError:
+            pass
     return response
 
 
@@ -27,14 +38,21 @@ async def _get_user_task_or_404(service: OCRService, task_id: int, user_id: int)
 
 @router.post("/task", response_model=TaskResponse)
 async def create_ocr_task(
+    request: Request,
     current_user: Annotated[User, Depends(get_current_user)],
     file: UploadFile = File(...), 
     db: AsyncSession = Depends(get_db)
 ):
     service = OCRService(db)
     file_content = await file.read()
+    http_ms = None
+    t0 = getattr(request.state, "ocr_mon_started", None)
+    if t0 is not None:
+        http_ms = (time.perf_counter() - t0) * 1000.0
 
     new_task = await service.create_task(file_content, file.filename, file.content_type, current_user.id)
+    bm = BusinessMonitorService(db)
+    await bm.record_upload(new_task.id, current_user.id, http_ms, len(file_content))
     celery_task = process_ocr_task.delay(new_task.id)
 
     new_task.celery_task_id = celery_task.id

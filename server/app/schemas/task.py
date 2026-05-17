@@ -23,6 +23,8 @@ class TaskResponse(TaskBase):
     image_width: Optional[int] = None
     image_height: Optional[int] = None
     file_url: Optional[str] = None
+    original_text: Optional[str] = None
+    processed_text: Optional[str] = None
 
     class Config:
         from_attributes = True

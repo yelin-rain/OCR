@@ -42,9 +42,10 @@ class OCRTaskRepository:
         )
         return result.scalars().all()
 
-    async def delete(self, task: OCRTask) -> None:
+    async def delete(self, task: OCRTask, *, commit: bool = True) -> None:
         await self.session.delete(task)
-        await self.session.commit()
+        if commit:
+            await self.session.commit()
 
     async def list_history_for_user(
         self,

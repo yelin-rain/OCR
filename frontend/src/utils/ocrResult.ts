@@ -40,10 +40,23 @@ export function parseOcrResult(resultStr: string | null): ParsedOcrResult {
           } as OcrLine;
         })
         .filter((line): line is OcrLine => Boolean(line));
+      const processedText =
+        typeof data.processed_text === "string" ? data.processed_text.trim() : "";
+      if (processedText) {
+        const procLines = processedText.split("\n");
+        if (lines.length === 1) {
+          lines[0].words = procLines[0] ?? processedText;
+        } else if (procLines.length === lines.length) {
+          lines.forEach((line, i) => {
+            line.words = procLines[i] ?? line.words;
+          });
+        }
+      }
       const fullText =
-        typeof data.full_text === "string" && data.full_text.trim()
+        processedText ||
+        (typeof data.full_text === "string" && data.full_text.trim()
           ? data.full_text
-          : lines.map((line) => line.words).join("\n");
+          : lines.map((line) => line.words).join("\n"));
       return { type: "lines", lines, fullText, raw: data };
     }
 

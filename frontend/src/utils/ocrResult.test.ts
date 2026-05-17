@@ -18,6 +18,20 @@ describe("parseOcrResult", () => {
     }
   });
 
+  it("applies processed_text over words_result for display", () => {
+    const input = JSON.stringify({
+      words_result: [{ words: "那林雨", probability: 0.99 }],
+      original_text: "那林雨",
+      processed_text: "耶林雨",
+    });
+    const output = parseOcrResult(input);
+    expect(output.type).toBe("lines");
+    if (output.type === "lines") {
+      expect(output.lines[0].words).toBe("耶林雨");
+      expect(output.fullText).toBe("耶林雨");
+    }
+  });
+
   it("parses ai studio markdown text format", () => {
     const input = JSON.stringify({
       result: {

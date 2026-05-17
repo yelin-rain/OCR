@@ -1,0 +1,82 @@
+{
+  "exported_at": "2026-05-08T07:39:18.145473Z",
+  "reason": "未找到 pg_dump 可执行文件（请安装 PostgreSQL 客户端或配置 PATH）",
+  "users": [
+    {
+      "id": 1,
+      "username": "demo",
+      "email": "demo@example.com"
+    },
+    {
+      "id": 2,
+      "username": "user5",
+      "email": "user5@example.com"
+    },
+    {
+      "id": 3,
+      "username": "yalier",
+      "email": "3467778272@qq.com"
+    },
+    {
+      "id": 5,
+      "username": "1",
+      "email": "123@qq.com"
+    },
+    {
+      "id": 4,
+      "username": "yyy",
+      "email": "777888999@qq.com"
+    }
+  ],
+  "tasks": [
+    {
+      "id": 47,
+      "filename": "test1.jpg",
+      "status": "COMPLETED",
+      "created_at": "2026-05-01 10:43:36.888506",
+      "owner_id": 4
+    },
+    {
+      "id": 46,
+      "filename": "test2.jpg",
+      "status": "COMPLETED",
+      "created_at": "2026-05-01 10:39:18.308741",
+      "owner_id": 4
+    },
+    {
+      "id": 49,
+      "filename": "test3.jpg",
+      "status": "COMPLETED",
+      "created_at": "2026-05-01 12:05:29.256649",
+      "owner_id": 4
+    },
+    {
+      "id": 52,
+      "filename": "电子签名.png",
+      "status": "COMPLETED",
+      "created_at": "2026-05-05 04:51:52.657531",
+      "owner_id": 4
+    },
+    {
+      "id": 51,
+      "filename": "general_ocr_002.png",
+      "status": "COMPLETED",
+      "created_at": "2026-05-01 14:02:13.729194",
+      "owner_id": 4
+    },
+    {
+      "id": 50,
+      "filename": "test2.jpg",
+      "status": "COMPLETED",
+      "created_at": "2026-05-01 13:02:30.202289",
+      "owner_id": 4
+    },
+    {
+      "id": 48,
+      "filename": "general_ocr_002.png",
+      "status": "COMPLETED",
+      "created_at": "2026-05-01 11:32:24.270208",
+      "owner_id": 4
+    }
+  ]
+}

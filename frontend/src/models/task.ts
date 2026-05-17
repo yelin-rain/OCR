@@ -12,4 +12,8 @@ export interface Task {
     image_height?: number | null;
     file_url?: string;
     celery_task_id?: string;
+    /** 拼接后的 CRNN 原始文本（仅 strip） */
+    original_text?: string | null;
+    /** 后处理后的文本 */
+    processed_text?: string | null;
 }
