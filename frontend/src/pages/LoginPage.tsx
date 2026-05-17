@@ -23,7 +23,7 @@ const LoginPage: React.FC = () => {
       });
 
       // Wait for user context to update
-      await login(response.data.access_token);
+      await login(response.data.access_token, response.data.refresh_token);
       navigate("/dashboard");
     } catch (err: any) {
       setError("Login failed. Please check your credentials.");

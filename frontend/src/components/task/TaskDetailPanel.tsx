@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { FileText, Image as ImageIcon } from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
+import { Download, FileText, Image as ImageIcon } from "lucide-react";
 import * as XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import { Document, Packer, Paragraph, TextRun } from "docx";
@@ -8,7 +8,9 @@ import { saveAs } from "file-saver";
 import { cn } from "../../utils/utils";
 import type { Task } from "../../models/task";
 import { parseOcrResult, type OcrLine } from "../../utils/ocrResult";
+import { normalizeRect } from "../../utils/detectionImage";
 import { OCRService } from "../../services/ocr_service";
+import { DetectionImageStack } from "./DetectionImageStack";
 
 interface TaskDetailPanelProps {
   task: Task | null;
@@ -38,72 +40,62 @@ function buildJsonExport(lines: OcrLine[], fullText: string) {
   );
 }
 
-function normalizeRect(location: number[][]) {
-  const xs = location.map((p) => p[0]);
-  const ys = location.map((p) => p[1]);
-  const left = Math.min(...xs);
-  const top = Math.min(...ys);
-  const right = Math.max(...xs);
-  const bottom = Math.max(...ys);
-  return { left, top, width: Math.max(1, right - left), height: Math.max(1, bottom - top) };
-}
+type ExportOption = {
+  id: string;
+  label: string;
+  hint: string;
+  onClick: () => void;
+  disabled?: boolean;
+};
 
-function drawOverlay(
-  canvas: HTMLCanvasElement,
-  image: HTMLImageElement,
-  lines: OcrLine[],
-  hovered: number | null,
-  selected: number | null,
-) {
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
-  const rect = image.getBoundingClientRect();
-  canvas.width = Math.max(1, Math.floor(rect.width));
-  canvas.height = Math.max(1, Math.floor(rect.height));
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+function ExportDropdown({ items }: { items: ExportOption[] }) {
+  const fallbackId =
+    items.find((i) => !i.disabled)?.id ?? items[0]?.id ?? "json";
+  const [format, setFormat] = useState(fallbackId);
 
-  const scaleX = canvas.width / image.naturalWidth;
-  const scaleY = canvas.height / image.naturalHeight;
-  lines.forEach((line, index) => {
-    if (!line.location || line.location.length === 0) return;
-    const r = normalizeRect(line.location);
-    const isActive = hovered === index || selected === index;
-    ctx.strokeStyle = isActive ? "#ef4444" : "#06b6d4";
-    ctx.lineWidth = isActive ? 3 : 2;
-    ctx.strokeRect(r.left * scaleX, r.top * scaleY, r.width * scaleX, r.height * scaleY);
-  });
-}
+  const resolvedId =
+    items.find((i) => i.id === format && !i.disabled)?.id ?? fallbackId;
+  const selected = items.find((i) => i.id === resolvedId);
 
-function lineAtPoint(
-  image: HTMLImageElement,
-  lines: OcrLine[],
-  x: number,
-  y: number,
-): number | null {
-  if (!image.naturalWidth || !image.naturalHeight) return null;
-  const rx = x * (image.naturalWidth / image.clientWidth);
-  const ry = y * (image.naturalHeight / image.clientHeight);
-  for (let i = 0; i < lines.length; i += 1) {
-    const box = lines[i].location;
-    if (!box || box.length === 0) continue;
-    const r = normalizeRect(box);
-    if (rx >= r.left && rx <= r.left + r.width && ry >= r.top && ry <= r.top + r.height) {
-      return i;
-    }
-  }
-  return null;
+  return (
+    <div className="flex items-center gap-2 shrink-0">
+      <select
+        id="export-format"
+        value={resolvedId}
+        onChange={(e) => setFormat(e.target.value)}
+        className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-800 min-w-[140px] focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+        aria-label="导出格式"
+      >
+        {items.map((item) => (
+          <option key={item.id} value={item.id} disabled={item.disabled}>
+            {item.label}
+          </option>
+        ))}
+      </select>
+      <button
+        type="button"
+        onClick={() => selected?.onClick()}
+        disabled={!selected || selected.disabled}
+        title={selected?.hint}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 disabled:opacity-50 transition-colors"
+      >
+        <Download className="w-4 h-4 text-gray-500" aria-hidden />
+        导出
+      </button>
+    </div>
+  );
 }
 
 export const TaskDetailPanel: React.FC<TaskDetailPanelProps> = ({ task }) => {
-  const parsed = useMemo(() => parseOcrResult(task?.result ?? null), [task?.result]);
+  const parsed = useMemo(
+    () => parseOcrResult(task?.result ?? null),
+    [task?.result],
+  );
   const [editedLines, setEditedLines] = useState<OcrLine[]>([]);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [hoverPos, setHoverPos] = useState<{ x: number; y: number } | null>(null);
   const [viewMode, setViewMode] = useState<"table" | "markdown">("table");
   const [savingCorrection, setSavingCorrection] = useState(false);
-  const imageRef = useRef<HTMLImageElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     if (parsed.type === "lines") {
@@ -113,15 +105,9 @@ export const TaskDetailPanel: React.FC<TaskDetailPanelProps> = ({ task }) => {
     }
     setHoveredIndex(null);
     setSelectedIndex(null);
-    setHoverPos(null);
   }, [task?.id, parsed]);
 
-  useEffect(() => {
-    const image = imageRef.current;
-    const canvas = canvasRef.current;
-    if (!image || !canvas || parsed.type !== "lines") return;
-    drawOverlay(canvas, image, editedLines, hoveredIndex, selectedIndex);
-  }, [editedLines, hoveredIndex, selectedIndex, parsed.type]);
+  const activeLineIndex = hoveredIndex ?? selectedIndex;
 
   if (!task) {
     return (
@@ -144,11 +130,19 @@ export const TaskDetailPanel: React.FC<TaskDetailPanelProps> = ({ task }) => {
       parsed.type === "lines"
         ? buildJsonExport(editedLines, fullTextForExport)
         : JSON.stringify({ text: fullTextForExport }, null, 2);
-    downloadBlob(`ocr-task-${task.id}.json`, content, "application/json;charset=utf-8");
+    downloadBlob(
+      `ocr-task-${task.id}.json`,
+      content,
+      "application/json;charset=utf-8",
+    );
   };
 
   const handleExportTxt = () => {
-    downloadBlob(`ocr-task-${task.id}.txt`, fullTextForExport, "text/plain;charset=utf-8");
+    downloadBlob(
+      `ocr-task-${task.id}.txt`,
+      fullTextForExport,
+      "text/plain;charset=utf-8",
+    );
   };
 
   const handleExportPdf = async () => {
@@ -183,16 +177,24 @@ export const TaskDetailPanel: React.FC<TaskDetailPanelProps> = ({ task }) => {
       sections: [
         {
           children: [
-            new Paragraph({ children: [new TextRun({ text: `OCR Task #${task.id}`, bold: true })] }),
+            new Paragraph({
+              children: [
+                new TextRun({ text: `OCR Task #${task.id}`, bold: true }),
+              ],
+            }),
             new Paragraph({ text: "" }),
             ...editedLines.map(
               (line, idx) =>
                 new Paragraph({
                   children: [
                     new TextRun(`${idx + 1}. ${line.words}`),
-                    new TextRun(`  (conf=${(line.probability * 100).toFixed(2)}%)`),
                     new TextRun(
-                      line.location?.length ? `  box=${JSON.stringify(line.location)}` : "",
+                      `  (conf=${(line.probability * 100).toFixed(2)}%)`,
+                    ),
+                    new TextRun(
+                      line.location?.length
+                        ? `  box=${JSON.stringify(line.location)}`
+                        : "",
                     ),
                   ],
                 }),
@@ -240,6 +242,30 @@ export const TaskDetailPanel: React.FC<TaskDetailPanelProps> = ({ task }) => {
     }
   };
 
+  const exportOptions: ExportOption[] = [
+    {
+      id: "json",
+      label: "JSON",
+      hint: "结构化数据",
+      onClick: handleExportJson,
+    },
+    {
+      id: "excel",
+      label: "Excel",
+      hint: "表格与置信度",
+      onClick: handleExportExcel,
+    },
+    { id: "txt", label: "TXT", hint: "纯文本", onClick: handleExportTxt },
+    { id: "word", label: "Word", hint: "含框坐标", onClick: handleExportWord },
+    {
+      id: "pdf",
+      label: "PDF",
+      hint: "原图叠加框",
+      onClick: handleExportPdf,
+      disabled: !task.file_url,
+    },
+  ];
+
   return (
     <div className="flex flex-col h-full">
       <div className="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
@@ -260,55 +286,26 @@ export const TaskDetailPanel: React.FC<TaskDetailPanelProps> = ({ task }) => {
       <div className="flex-1 overflow-y-auto p-6">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {task.file_url ? (
-            <div className="relative rounded-xl overflow-hidden border border-gray-200 bg-white p-2 flex justify-center">
-              <img
-                ref={imageRef}
-                src={task.file_url}
-                alt="Task"
-                className="h-full w-auto object-contain max-h-[250px]"
-                onLoad={() => {
-                  if (imageRef.current && canvasRef.current && parsed.type === "lines") {
-                    drawOverlay(canvasRef.current, imageRef.current, editedLines, hoveredIndex, selectedIndex);
-                  }
+            parsed.type === "lines" ? (
+              <DetectionImageStack
+                imageUrl={task.file_url}
+                lines={editedLines}
+                activeIndex={activeLineIndex}
+                onActiveIndexChange={(idx) => {
+                  setSelectedIndex(idx);
+                  setHoveredIndex(null);
                 }}
               />
-              {parsed.type === "lines" && (
-                <>
-                  <canvas
-                    ref={canvasRef}
-                    className="absolute pointer-events-auto top-2 left-2 right-2 bottom-2 h-[calc(100%-1rem)] w-[calc(100%-1rem)]"
-                    onMouseMove={(e) => {
-                      if (!imageRef.current) return;
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      const idx = lineAtPoint(imageRef.current, editedLines, e.clientX - rect.left, e.clientY - rect.top);
-                      setHoveredIndex(idx);
-                      setHoverPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-                    }}
-                    onMouseLeave={() => {
-                      setHoveredIndex(null);
-                      setHoverPos(null);
-                    }}
-                    onClick={(e) => {
-                      if (!imageRef.current) return;
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      const idx = lineAtPoint(imageRef.current, editedLines, e.clientX - rect.left, e.clientY - rect.top);
-                      setSelectedIndex(idx);
-                    }}
-                  />
-                  {hoveredIndex !== null && hoverPos && editedLines[hoveredIndex] && (
-                    <div
-                      className="absolute z-10 max-w-xs rounded-md bg-black/90 border border-cyan-500/30 text-xs p-2 text-gray-100 pointer-events-none"
-                      style={{ left: Math.min(hoverPos.x + 12, 320), top: Math.max(hoverPos.y - 8, 0) }}
-                    >
-                      <div>{editedLines[hoveredIndex].words}</div>
-                      <div className="text-cyan-300 mt-1">
-                        置信度: {(editedLines[hoveredIndex].probability * 100).toFixed(2)}%
-                      </div>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
+            ) : (
+              <div className="rounded-xl border border-gray-200 bg-white p-2 flex justify-center">
+                <img
+                  src={task.file_url}
+                  alt="Task"
+                  crossOrigin="anonymous"
+                  className="w-full max-h-[280px] object-contain"
+                />
+              </div>
+            )
           ) : (
             <div className="rounded-xl border border-gray-200 bg-gray-50 h-64 flex flex-col items-center justify-center text-gray-500 gap-3">
               <ImageIcon className="w-12 h-12 opacity-20" />
@@ -317,28 +314,18 @@ export const TaskDetailPanel: React.FC<TaskDetailPanelProps> = ({ task }) => {
           )}
 
           <div>
-            <h3 className="text-sm font-medium text-gray-500 mb-3 uppercase tracking-wider">
-              结构化识别结果
-            </h3>
-            <div className="flex flex-wrap gap-2 mb-4">
-              <button onClick={handleExportJson} className="px-3 py-1 rounded bg-blue-600/80 hover:bg-blue-600 text-white text-sm">
-                导出 JSON
-              </button>
-              <button onClick={handleExportExcel} className="px-3 py-1 rounded bg-emerald-600/80 hover:bg-emerald-600 text-white text-sm">
-                导出 Excel
-              </button>
-              <button onClick={handleExportTxt} className="px-3 py-1 rounded bg-violet-600/80 hover:bg-violet-600 text-white text-sm">
-                导出 TXT
-              </button>
-              <button onClick={handleExportWord} className="px-3 py-1 rounded bg-amber-600/80 hover:bg-amber-600 text-white text-sm">
-                导出 Word
-              </button>
-              <button onClick={handleExportPdf} className="px-3 py-1 rounded bg-rose-600/80 hover:bg-rose-600 text-white text-sm">
-                导出 PDF
-              </button>
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
+                结构化识别结果
+              </h3>
+              <ExportDropdown key={task.id} items={exportOptions} />
             </div>
-            {parsed.type === "empty" && <div className="text-gray-500 italic">暂无结果...</div>}
-            {parsed.type === "error" && <p className="text-red-400">解析结果出错</p>}
+            {parsed.type === "empty" && (
+              <div className="text-gray-500 italic">暂无结果...</div>
+            )}
+            {parsed.type === "error" && (
+              <p className="text-red-400">解析结果出错</p>
+            )}
             {parsed.type === "raw" && (
               <div className="bg-gray-50 p-4 rounded border border-red-100 text-xs text-gray-500 overflow-x-auto">
                 <code>{JSON.stringify(parsed.raw, null, 2)}</code>
@@ -356,19 +343,23 @@ export const TaskDetailPanel: React.FC<TaskDetailPanelProps> = ({ task }) => {
                     onClick={() => setViewMode("table")}
                     className={cn(
                       "px-3 py-1 rounded text-sm",
-                      viewMode === "table" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700",
+                      viewMode === "table"
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-100 text-gray-700",
                     )}
                   >
-                    表格视图
+                    识别置信度
                   </button>
                   <button
                     onClick={() => setViewMode("markdown")}
                     className={cn(
                       "px-3 py-1 rounded text-sm",
-                      viewMode === "markdown" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700",
+                      viewMode === "markdown"
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-100 text-gray-700",
                     )}
                   >
-                    Markdown 视图
+                    识别结果
                   </button>
                   <button
                     onClick={handleSaveCorrection}
@@ -384,9 +375,13 @@ export const TaskDetailPanel: React.FC<TaskDetailPanelProps> = ({ task }) => {
                       <div
                         key={idx}
                         onClick={() => setSelectedIndex(idx)}
+                        onMouseEnter={() => setHoveredIndex(idx)}
+                        onMouseLeave={() => setHoveredIndex(null)}
                         className={cn(
-                          "bg-white p-2 rounded border flex justify-between items-start gap-3",
-                          selectedIndex === idx ? "border-red-300" : "border-gray-200",
+                          "bg-white p-2 rounded border flex justify-between items-start gap-3 cursor-pointer",
+                          activeLineIndex === idx
+                            ? "border-red-300 bg-red-50/30"
+                            : "border-gray-200",
                         )}
                       >
                         <input
@@ -406,7 +401,9 @@ export const TaskDetailPanel: React.FC<TaskDetailPanelProps> = ({ task }) => {
                   </div>
                 ) : (
                   <pre className="bg-gray-50 border border-gray-200 rounded p-3 text-sm text-gray-700 whitespace-pre-wrap max-h-[380px] overflow-y-auto">
-                    {editedLines.map((line, idx) => `${idx + 1}. ${line.words}`).join("\n")}
+                    {editedLines
+                      .map((line, idx) => `${idx + 1}. ${line.words}`)
+                      .join("\n")}
                   </pre>
                 )}
               </div>

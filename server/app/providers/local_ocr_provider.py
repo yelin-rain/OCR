@@ -194,6 +194,20 @@ class LocalOCRProvider:
             return None
 
     def _normalize_box(self, box: Any) -> list[list[float]] | None:
+        """支持 Paddle 2.x 多边形、Paddle 3.x numpy 多边形与 [x1,y1,x2,y2] 矩形。"""
+        if box is None:
+            return None
+        try:
+            if isinstance(box, np.ndarray):
+                box = box.tolist()
+        except Exception:
+            pass
+
+        if isinstance(box, (list, tuple)) and len(box) == 4:
+            if all(isinstance(v, (int, float, np.integer, np.floating)) for v in box):
+                x1, y1, x2, y2 = (float(box[0]), float(box[1]), float(box[2]), float(box[3]))
+                return [[x1, y1], [x2, y1], [x2, y2], [x1, y2]]
+
         if not isinstance(box, (list, tuple)):
             return None
         normalized: list[list[float]] = []
@@ -226,9 +240,9 @@ class LocalOCRProvider:
             polys = (
                 first_item.get("rec_polys")
                 or first_item.get("dt_polys")
-                or first_item.get("rec_boxes")
                 or []
             )
+            rec_boxes = first_item.get("rec_boxes")
             for idx, text_raw in enumerate(texts):
                 text = str(text_raw).strip() if text_raw is not None else ""
                 if not text:
@@ -240,10 +254,17 @@ class LocalOCRProvider:
                     except (TypeError, ValueError):
                         score = 1.0
                 item: Dict[str, Any] = {"words": text, "probability": score}
+                box = None
                 if idx < len(polys):
                     box = self._normalize_box(polys[idx])
-                    if box:
-                        item["location"] = box
+                if not box and rec_boxes is not None:
+                    try:
+                        if len(rec_boxes) > idx:
+                            box = self._normalize_box(rec_boxes[idx])
+                    except (TypeError, IndexError):
+                        pass
+                if box:
+                    item["location"] = box
                 lines.append(item)
             return lines
 

@@ -181,9 +181,6 @@ const Dashboard: React.FC = () => {
           <h2 className="text-3xl font-bold text-gray-900">
             欢迎回来，{user?.username}
           </h2>
-          <p className="text-gray-600 mt-2">
-            数据面板：业务感知监控、坏例分析、运行日志与任务列表
-          </p>
         </div>
       </header>
 
@@ -194,7 +191,7 @@ const Dashboard: React.FC = () => {
             <BarChart3 className="w-5 h-5 text-violet-600" />
             <h3 className="text-lg font-semibold">业务感知监控</h3>
             <span className="text-xs text-gray-400">
-              /api/monitor/stats · React Query 自动刷新
+              React Query 自动刷新
               {statsUpdatedAt
                 ? ` · 上次 ${new Date(statsUpdatedAt).toLocaleTimeString()}`
                 : ""}

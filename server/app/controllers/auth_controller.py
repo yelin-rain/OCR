@@ -8,9 +8,18 @@ from sqlalchemy.future import select
 from jose import JWTError, jwt
 
 from app.core.database import get_db
-from app.core.security import create_access_token, get_password_hash, verify_password, SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from app.core.security import (
+    create_access_token,
+    create_refresh_token,
+    get_password_hash,
+    verify_password,
+    SECRET_KEY,
+    ALGORITHM,
+    ACCESS_TOKEN_EXPIRE_MINUTES,
+    REFRESH_TOKEN_EXPIRE_DAYS,
+)
 from app.models.user import User
-from app.schemas.auth import Token, TokenData
+from app.schemas.auth import Token, TokenData, RefreshTokenRequest
 from app.schemas.user import UserCreate, UserResponse, UserUpdate
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -24,6 +33,9 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: As
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        token_type = payload.get("type")
+        if token_type is not None and token_type != "access":
+            raise credentials_exception
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
@@ -71,7 +83,56 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
     access_token = create_access_token(
         subject=user.username, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    refresh_token = create_refresh_token(
+        subject=user.username,
+        expires_delta=timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS),
+    )
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+    }
+
+
+@router.post("/refresh", response_model=Token)
+async def refresh_access_token(
+    body: RefreshTokenRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid or expired refresh token",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(body.refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("type") != "refresh":
+            raise credentials_exception
+        username = payload.get("sub")
+        if not username:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+
+    result = await db.execute(select(User).where(User.username == username))
+    user = result.scalars().first()
+    if user is None or not user.is_active:
+        raise credentials_exception
+
+    access_token = create_access_token(
+        subject=user.username,
+        expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
+    )
+    refresh_token = create_refresh_token(
+        subject=user.username,
+        expires_delta=timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS),
+    )
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+    }
+
 
 @router.get("/me", response_model=UserResponse)
 async def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):

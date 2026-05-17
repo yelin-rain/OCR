@@ -3,7 +3,6 @@ import { Outlet, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
   ScanText,
-  Github,
   User as UserIcon,
   LayoutDashboard,
   History,
@@ -60,12 +59,6 @@ const Layout: React.FC = () => {
                 Login
               </Link>
             )}
-            <a
-              href="#"
-              className="text-gray-500 hover:text-gray-900 transition-colors"
-            >
-              <Github className="w-5 h-5" />
-            </a>
           </nav>
         </div>
       </header>

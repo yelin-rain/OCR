@@ -194,6 +194,8 @@ class OCRService:
                         return
 
                     processed_data = image_processor.process_image(file_data)
+                    proc_img = Image.open(io.BytesIO(processed_data))
+                    proc_w, proc_h = int(proc_img.width), int(proc_img.height)
                     print(f"Image processed. Original size: {len(file_data)} bytes -> Processed: {len(processed_data)} bytes")
 
                     ocr_provider = get_ocr_provider()
@@ -213,6 +215,20 @@ class OCRService:
                         OCRService._mark_task_failed(task, "OCR inference timeout")
                         await session.commit()
                         return
+
+                    words = api_result.get("words_result") if isinstance(api_result, dict) else []
+                    if (
+                        isinstance(words, list)
+                        and task.image_width
+                        and task.image_height
+                    ):
+                        image_processor.map_words_result_to_original(
+                            words,
+                            task.image_width,
+                            task.image_height,
+                            proc_w,
+                            proc_h,
+                        )
 
                     inference_ms = (time.perf_counter() - started) * 1000.0
                     OCRService._mark_task_completed(task, api_result, inference_ms)
