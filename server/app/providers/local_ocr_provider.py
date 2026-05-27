@@ -16,99 +16,173 @@ import subprocess
 import paddle
 from paddleocr import PaddleOCR
 from app.core.config import settings
-from typing import Dict, Any
+from typing import Dict, Any, TypedDict
+
+
+class _OCRRuntime(TypedDict):
+    ocr: PaddleOCR
+    det_dir: str | None
+    rec_dir: str | None
+
 
 class LocalOCRProvider:
     def __init__(self):
-        # PaddlePaddle C++ engine has issues with Chinese paths on Windows.
-        # We'll copy the models to a temp ASCII path if the original path contains non-ASCII characters.
-        self.det_dir = self._prepare_model_dir(settings.DET_MODEL_DIR, "det") if settings.USE_LOCAL_MODELS else None
-        self.rec_dir = self._prepare_model_dir(settings.REC_MODEL_DIR, "rec") if settings.USE_LOCAL_MODELS else None
-        if settings.USE_LOCAL_MODELS:
-            self.det_dir, self.rec_dir = self._validate_local_model_pair(self.det_dir, self.rec_dir)
+        self._runtimes: dict[bool, _OCRRuntime] = {}
 
-        if settings.USE_LOCAL_MODELS:
-            print(f"Attempting to load local models from: {self.det_dir} and {self.rec_dir}")
+    @staticmethod
+    def local_models_available() -> bool:
+        """检测自训练 det/rec 是否具备推理文件（不加载 Paddle）。"""
+        det = os.path.isdir(settings.DET_MODEL_DIR)
+        rec = os.path.isdir(settings.REC_MODEL_DIR)
+        if not det and not rec:
+            return False
+        provider = LocalOCRProvider()
+        det_dir = provider._prepare_model_dir(settings.DET_MODEL_DIR, "det") if det else None
+        rec_dir = provider._prepare_model_dir(settings.REC_MODEL_DIR, "rec") if rec else None
+        det_dir, rec_dir = provider._validate_local_model_pair(det_dir, rec_dir)
+        return bool(det_dir or rec_dir)
+
+    def _resolve_use_local(self, use_local_models: bool | None) -> bool:
+        if use_local_models is None:
+            return bool(settings.USE_LOCAL_MODELS)
+        return bool(use_local_models)
+
+    def _get_runtime(self, use_local_models: bool | None = None) -> _OCRRuntime:
+        use_local = self._resolve_use_local(use_local_models)
+        if use_local not in self._runtimes:
+            self._runtimes[use_local] = self._build_runtime(use_local)
+        return self._runtimes[use_local]
+
+    def _build_runtime(self, use_local: bool) -> _OCRRuntime:
+        det_dir = None
+        rec_dir = None
+        if use_local:
+            det_dir = self._prepare_model_dir(settings.DET_MODEL_DIR, "det")
+            rec_dir = self._prepare_model_dir(settings.REC_MODEL_DIR, "rec")
+            det_dir, rec_dir = self._validate_local_model_pair(det_dir, rec_dir)
+            print(f"Attempting to load local models from: {det_dir} and {rec_dir}")
         else:
-            print("Using official high-accuracy models (PP-OCRv5). To use local models, set USE_LOCAL_MODELS=True in config.py")
+            print("Using official PP-OCRv4 models")
 
         try:
-            # Set internal paddle flags if possible
             try:
-                import paddle
-                # Force old executor
                 paddle.set_flags({
                     "FLAGS_enable_pir_api": 0,
-                    "FLAGS_enable_onednn": 0
+                    "FLAGS_enable_onednn": 0,
                 })
-            except:
+            except Exception:
                 pass
 
-            # Initialize PaddleOCR with minimal arguments for maximum compatibility
-            # Force PP-OCRv4 to avoid unstable PIR paths in 3.0
-            if not self.det_dir:
+            if not det_dir and not rec_dir:
                 print("Initializing PaddleOCR with official PP-OCRv4 models...")
-                self.ocr = PaddleOCR(
-                    ocr_version='PP-OCRv4',
+                ocr = PaddleOCR(
+                    ocr_version="PP-OCRv4",
                     use_angle_cls=False,
-                    lang='ch',
-                    device='cpu',
-                    engine='paddle',
+                    lang="ch",
+                    device="cpu",
+                    engine="paddle",
                     enable_hpi=False,
                     enable_mkldnn=False,
                 )
             else:
-                print(f"Initializing PaddleOCR with local models from {self.det_dir}...")
-                self.ocr = PaddleOCR(
-                    text_detection_model_dir=self.det_dir,
-                    text_recognition_model_dir=self.rec_dir,
-                    use_textline_orientation=False,
-                    lang='ch',
-                    device='cpu',
-                    engine='paddle',
-                    enable_hpi=False,
-                    enable_mkldnn=False,
-                )
+                ocr_kwargs: dict = {
+                    "use_textline_orientation": False,
+                    "lang": "ch",
+                    "device": "cpu",
+                    "engine": "paddle",
+                    "enable_hpi": False,
+                    "enable_mkldnn": False,
+                }
+                if det_dir:
+                    ocr_kwargs["text_detection_model_dir"] = det_dir
+                    print(f"Using local detection model: {det_dir}")
+                else:
+                    ocr_kwargs["ocr_version"] = "PP-OCRv4"
+                if rec_dir:
+                    ocr_kwargs["text_recognition_model_dir"] = rec_dir
+                    print(f"Using local recognition model (rec_rare_2): {rec_dir}")
+                print("Initializing PaddleOCR with mixed local/official models...")
+                ocr = PaddleOCR(**ocr_kwargs)
             print("PaddleOCR initialized successfully.")
+            return {"ocr": ocr, "det_dir": det_dir, "rec_dir": rec_dir}
         except Exception as e:
             print(f"Error initializing PaddleOCR: {e}")
-            if self.det_dir or self.rec_dir:
+            if det_dir or rec_dir:
                 print("Falling back to official PP-OCRv4 models...")
-                self.ocr = PaddleOCR(
-                    ocr_version='PP-OCRv4',
-                    lang='ch',
-                    device='cpu',
-                    engine='paddle',
+                ocr = PaddleOCR(
+                    ocr_version="PP-OCRv4",
+                    lang="ch",
+                    device="cpu",
+                    engine="paddle",
                     enable_hpi=False,
                     enable_mkldnn=False,
                 )
-            else:
-                raise e
+                return {"ocr": ocr, "det_dir": None, "rec_dir": None}
+            raise e
+
+    @staticmethod
+    def _model_version_label(det_dir: str | None, rec_dir: str | None) -> str:
+        if det_dir and rec_dir:
+            return "local-det_db_resnet50_cbam+rec_rare_2"
+        if rec_dir:
+            return "local-rec_rare_2+PP-OCRv4-det"
+        if det_dir:
+            return "local-det_db_resnet50_cbam+PP-OCRv4-rec"
+        return "official-PP-OCRv4"
 
     def _validate_local_model_pair(self, det_dir: str | None, rec_dir: str | None) -> tuple[str | None, str | None]:
-        if not det_dir or not rec_dir:
-            print("Local model path is missing, fallback to official models.")
-            return None, None
+        det_ok, det_msg = (False, "missing")
+        rec_ok, rec_msg = (False, "missing")
+        if det_dir:
+            det_ok, det_msg = self._has_required_infer_files(det_dir)
+        if rec_dir:
+            rec_ok, rec_msg = self._has_required_infer_files(rec_dir)
 
-        det_ok, det_msg = self._validate_model_dir(det_dir)
-        rec_ok, rec_msg = self._validate_model_dir(rec_dir)
         if det_ok and rec_ok:
+            print(f"Local models ready (det={det_msg}, rec={rec_msg}).")
             return det_dir, rec_dir
+        if rec_ok:
+            print(f"Local rec model ready ({rec_msg}); detection uses official PP-OCRv4.")
+            return None, rec_dir
+        if det_ok:
+            print(f"Local det model ready ({det_msg}); recognition uses official PP-OCRv4.")
+            return det_dir, None
 
         print("Local models are not usable, fallback to official models.")
-        if not det_ok:
+        if det_dir and not det_ok:
             print(f"Detection model invalid: {det_msg}")
-        if not rec_ok:
+        if rec_dir and not rec_ok:
             print(f"Recognition model invalid: {rec_msg}")
         return None, None
 
-    def _validate_model_dir(self, model_dir: str) -> tuple[bool, str]:
-        pdmodel = os.path.join(model_dir, "inference.pdmodel")
+    def _resolve_infer_paths(self, model_dir: str) -> tuple[str | None, str | None, str | None]:
+        """返回 (model_file, params_file, format)，支持传统 pdmodel 或 Paddle3 PIR 的 json。"""
         pdiparams = os.path.join(model_dir, "inference.pdiparams")
-        if not os.path.exists(pdmodel):
-            return False, f"missing file: {pdmodel}"
-        if not os.path.exists(pdiparams):
-            return False, f"missing file: {pdiparams}"
+        if not os.path.isfile(pdiparams):
+            return None, None, None
+        pdmodel = os.path.join(model_dir, "inference.pdmodel")
+        if os.path.isfile(pdmodel):
+            return pdmodel, pdiparams, "pdmodel"
+        pdjson = os.path.join(model_dir, "inference.json")
+        if os.path.isfile(pdjson):
+            return pdjson, pdiparams, "json"
+        return None, None, None
+
+    def _validate_model_dir(self, model_dir: str) -> tuple[bool, str]:
+        model_file, pdiparams, fmt = self._resolve_infer_paths(model_dir)
+        if not model_file:
+            pdmodel = os.path.join(model_dir, "inference.pdmodel")
+            pdjson = os.path.join(model_dir, "inference.json")
+            pdiparams_path = os.path.join(model_dir, "inference.pdiparams")
+            if not os.path.exists(pdiparams_path):
+                info_file = os.path.join(model_dir, "inference.pdiparams.info")
+                if os.path.isfile(info_file):
+                    return False, (
+                        f"missing file: {pdiparams_path} (found {info_file}; "
+                        "need real inference.pdiparams)"
+                    )
+                return False, f"missing file: {pdiparams_path}"
+            return False, f"missing file: {pdmodel} or {pdjson}"
 
         # Run predictor creation in a child process to avoid crashing the main process.
         check_cmd = [
@@ -116,7 +190,7 @@ class LocalOCRProvider:
             "-c",
             (
                 "import paddle.inference as I; "
-                f"cfg=I.Config(r'{pdmodel}', r'{pdiparams}'); "
+                f"cfg=I.Config(r'{model_file}', r'{pdiparams}'); "
                 "cfg.disable_gpu(); "
                 "I.create_predictor(cfg); "
                 "print('ok')"
@@ -138,22 +212,22 @@ class LocalOCRProvider:
             return False, str(e)
 
     def _has_required_infer_files(self, model_dir: str) -> tuple[bool, str]:
-        """Fast file-level guard: local model is usable only with pdmodel + pdiparams."""
+        """Fast file-level guard: pdiparams + (pdmodel 或 inference.json)。"""
         if not model_dir or not os.path.isdir(model_dir):
             return False, f"missing directory: {model_dir}"
-        pdmodel = os.path.join(model_dir, "inference.pdmodel")
-        pdiparams = os.path.join(model_dir, "inference.pdiparams")
-        if not os.path.isfile(pdmodel):
-            return False, f"missing file: {pdmodel}"
-        if not os.path.isfile(pdiparams):
+        model_file, pdiparams, fmt = self._resolve_infer_paths(model_dir)
+        if model_file and pdiparams:
+            return True, fmt or "ok"
+        pdiparams_path = os.path.join(model_dir, "inference.pdiparams")
+        if not os.path.isfile(pdiparams_path):
             info_file = os.path.join(model_dir, "inference.pdiparams.info")
             if os.path.isfile(info_file):
                 return False, (
-                    f"missing file: {pdiparams} (found {info_file}; "
-                    "this is metadata only, official inference needs real .pdiparams)"
+                    f"missing file: {pdiparams_path} (found {info_file}; "
+                    "this is metadata only, need real inference.pdiparams)"
                 )
-            return False, f"missing file: {pdiparams}"
-        return True, "ok"
+            return False, f"missing file: {pdiparams_path}"
+        return False, "missing inference.pdmodel or inference.json"
 
     def _prepare_model_dir(self, original_dir: str, prefix: str) -> str:
         """
@@ -335,34 +409,44 @@ class LocalOCRProvider:
             heat /= m
         return heat.tolist()
 
-    async def ocr_general_basic(self, image_bytes: bytes) -> Dict[str, Any]:
+    async def ocr_general_basic(
+        self,
+        image_bytes: bytes,
+        use_local_models: bool | None = None,
+    ) -> Dict[str, Any]:
         """
         Perform OCR using local PaddleOCR models.
+        use_local_models: True 自训练，False 官方 PP-OCRv4，None 使用配置默认值。
         """
+        runtime = self._get_runtime(use_local_models)
+        ocr = runtime["ocr"]
+        det_dir = runtime["det_dir"]
+        rec_dir = runtime["rec_dir"]
+        model_version = self._model_version_label(det_dir, rec_dir)
+
         try:
-            # Convert bytes to numpy array for PaddleOCR
-            image = Image.open(io.BytesIO(image_bytes)).convert('RGB')
+            image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
             image_np = np.array(image)
             image_width, image_height = int(image.width), int(image.height)
 
             words_result: list[Dict[str, Any]] = []
 
             try:
-                if hasattr(self.ocr, "predict"):
+                if hasattr(ocr, "predict"):
                     print("Using PaddleOCR predict API...")
-                    result = self.ocr.predict(image_np)
+                    result = ocr.predict(image_np)
                 else:
                     print("Using traditional PaddleOCR ocr API...")
-                    result = self.ocr.ocr(image_np)
+                    result = ocr.ocr(image_np)
 
                 words_result = self._extract_lines_from_result(result)
             except Exception as e:
                 print(f"Primary OCR API failed ({type(e).__name__}: {e}), trying alternative...")
                 try:
-                    if hasattr(self.ocr, "ocr"):
-                        result = self.ocr.ocr(image_np)
+                    if hasattr(ocr, "ocr"):
+                        result = ocr.ocr(image_np)
                     else:
-                        result = self.ocr.predict(image_np)
+                        result = ocr.predict(image_np)
                     words_result = self._extract_lines_from_result(result)
                 except Exception as final_e:
                     print(f"Final OCR fallback failed: {final_e}")
@@ -374,7 +458,7 @@ class LocalOCRProvider:
                     "words_result": [],
                     "feature_map": [],
                     "full_text": "",
-                    "model_version": "local-PP-OCRv4",
+                    "model_version": model_version,
                 }
 
             full_text = "\n".join(
@@ -389,7 +473,7 @@ class LocalOCRProvider:
                 "dt_boxes": [item["location"] for item in words_result if "location" in item],
                 "feature_map": self._build_feature_map(words_result, image_width, image_height),
                 "full_text": full_text,
-                "model_version": "local-PP-OCRv4",
+                "model_version": model_version,
             }
         except Exception as e:
             print(f"Local OCR Error during inference: {e}")

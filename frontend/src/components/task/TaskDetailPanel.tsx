@@ -268,8 +268,15 @@ export const TaskDetailPanel: React.FC<TaskDetailPanelProps> = ({ task }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-gray-800">任务 #{task.id}</h2>
+      <div className="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center gap-3">
+        <div className="min-w-0">
+          <h2 className="text-lg font-semibold text-gray-800">任务 #{task.id}</h2>
+          {task.model_version ? (
+            <p className="text-xs text-gray-500 mt-0.5 truncate" title={task.model_version}>
+              模型：{task.model_version}
+            </p>
+          ) : null}
+        </div>
         <span
           className={cn(
             "px-3 py-1 rounded-full text-xs font-medium border",

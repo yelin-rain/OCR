@@ -96,7 +96,9 @@ class BusinessMonitorService:
             "pie": pie,
         }
 
-    async def list_bad_cases(self, owner_id: int) -> list[dict]:
+    async def list_bad_cases(self, owner_id: int, request=None) -> list[dict]:
+        from app.utils.task_file_url import build_task_file_url
+
         tasks = await self.repo.list_bad_case_tasks(owner_id, limit=30)
         items = []
         for t in tasks:
@@ -107,7 +109,7 @@ class BusinessMonitorService:
                     "status": t.status.value,
                     "avg_confidence": float(t.avg_confidence) if t.avg_confidence is not None else None,
                     "inference_ms": float(t.inference_ms) if t.inference_ms is not None else None,
-                    "file_url": storage_provider.get_file_url(t.file_path),
+                    "file_url": build_task_file_url(t, request=request),
                     "created_at": t.created_at,
                     "result_preview": _result_text_preview(t.result),
                 }

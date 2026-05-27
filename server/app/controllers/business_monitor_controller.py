@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.controllers.auth_controller import get_current_user
@@ -29,9 +29,10 @@ async def get_monitor_stats(
 
 @router.get("/bad-cases", response_model=BadCasesResponse)
 async def get_bad_cases(
+    request: Request,
     current_user: Annotated[User, Depends(get_current_user)],
     db: AsyncSession = Depends(get_db),
 ):
     svc = BusinessMonitorService(db)
-    items = await svc.list_bad_cases(current_user.id)
+    items = await svc.list_bad_cases(current_user.id, request=request)
     return BadCasesResponse(items=[BadCaseItem.model_validate(x) for x in items])

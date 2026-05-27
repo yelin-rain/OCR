@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
 
       // Wait for user context to update
       await login(response.data.access_token, response.data.refresh_token);
-      navigate("/dashboard");
+      navigate("/");
     } catch (err: any) {
       setError("Login failed. Please check your credentials.");
     }
@@ -36,7 +36,9 @@ const LoginPage: React.FC = () => {
         <h2 className="text-3xl font-bold mb-2 text-center text-gray-900">
           Login
         </h2>
-        <p className="text-center text-sm text-gray-500 mb-6">使用你的账号继续</p>
+        <p className="text-center text-sm text-gray-500 mb-6">
+          使用你的账号继续
+        </p>
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 p-3 rounded mb-4 text-sm">
             {error}

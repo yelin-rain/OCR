@@ -7,23 +7,36 @@ from typing import Dict, Any
 from app.core.config import settings
 
 
-def _check_required_files(model_dir: str) -> Dict[str, Any]:
-    pdmodel = os.path.join(model_dir, "inference.pdmodel")
+def _resolve_infer_files(model_dir: str) -> tuple[str | None, str | None, str | None]:
     pdiparams = os.path.join(model_dir, "inference.pdiparams")
+    if not os.path.isfile(pdiparams):
+        return None, None, None
+    pdmodel = os.path.join(model_dir, "inference.pdmodel")
+    if os.path.isfile(pdmodel):
+        return pdmodel, pdiparams, "pdmodel"
+    pdjson = os.path.join(model_dir, "inference.json")
+    if os.path.isfile(pdjson):
+        return pdjson, pdiparams, "json"
+    return None, None, None
+
+
+def _check_required_files(model_dir: str) -> Dict[str, Any]:
+    model_file, pdiparams, fmt = _resolve_infer_files(model_dir)
     yml = os.path.join(model_dir, "inference.yml")
     return {
         "model_dir": model_dir,
         "exists": os.path.isdir(model_dir),
-        "pdmodel_exists": os.path.exists(pdmodel),
-        "pdiparams_exists": os.path.exists(pdiparams),
+        "format": fmt,
+        "model_file_exists": bool(model_file),
+        "pdiparams_exists": os.path.exists(pdiparams) if pdiparams else False,
         "yml_exists": os.path.exists(yml),
-        "pdmodel_path": pdmodel,
+        "model_file_path": model_file,
         "pdiparams_path": pdiparams,
     }
 
 
-def _probe_predictor(pdmodel: str, pdiparams: str) -> Dict[str, Any]:
-    if not (os.path.exists(pdmodel) and os.path.exists(pdiparams)):
+def _probe_predictor(model_file: str | None, pdiparams: str | None) -> Dict[str, Any]:
+    if not (model_file and pdiparams and os.path.exists(model_file) and os.path.exists(pdiparams)):
         return {"ok": False, "reason": "missing required files"}
 
     cmd = [
@@ -31,7 +44,7 @@ def _probe_predictor(pdmodel: str, pdiparams: str) -> Dict[str, Any]:
         "-c",
         (
             "import paddle.inference as I; "
-            f"cfg=I.Config(r'{pdmodel}', r'{pdiparams}'); "
+            f"cfg=I.Config(r'{model_file}', r'{pdiparams}'); "
             "cfg.disable_gpu(); "
             "I.create_predictor(cfg); "
             "print('ok')"
@@ -59,7 +72,7 @@ def _probe_predictor(pdmodel: str, pdiparams: str) -> Dict[str, Any]:
 
 def _check_single(name: str, model_dir: str) -> Dict[str, Any]:
     file_check = _check_required_files(model_dir)
-    probe = _probe_predictor(file_check["pdmodel_path"], file_check["pdiparams_path"])
+    probe = _probe_predictor(file_check["model_file_path"], file_check["pdiparams_path"])
     return {
         "name": name,
         "files": file_check,

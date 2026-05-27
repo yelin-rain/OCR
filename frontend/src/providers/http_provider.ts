@@ -8,7 +8,19 @@ import {
   setTokens,
 } from "../utils/authToken";
 
-const API_BASE = "http://localhost:8000";
+/** 局域网访问时，用当前页面的 host 拼 API，避免同学电脑请求自己的 localhost */
+function resolveApiBase(): string {
+  const fromEnv = import.meta.env.VITE_API_BASE as string | undefined;
+  if (fromEnv?.trim()) return fromEnv.trim().replace(/\/$/, "");
+
+  const host = window.location.hostname;
+  if (host && host !== "localhost" && host !== "127.0.0.1") {
+    return `http://${host}:8000`;
+  }
+  return "http://localhost:8000";
+}
+
+const API_BASE = resolveApiBase();
 
 export const httpClient = axios.create({
   baseURL: API_BASE,

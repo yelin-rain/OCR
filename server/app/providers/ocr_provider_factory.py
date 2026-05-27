@@ -6,7 +6,11 @@ from app.providers.local_ocr_provider import local_ocr_provider
 
 
 class OCRProvider(Protocol):
-    async def ocr_general_basic(self, image_bytes: bytes) -> Dict[str, Any]:
+    async def ocr_general_basic(
+        self,
+        image_bytes: bytes,
+        use_local_models: bool | None = None,
+    ) -> Dict[str, Any]:
         ...
 
 

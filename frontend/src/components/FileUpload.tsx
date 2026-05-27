@@ -3,15 +3,27 @@ import { useDropzone } from "react-dropzone";
 import { Upload, Loader2 } from "lucide-react";
 import { cn } from "../utils/utils";
 import { message } from "antd";
+import {
+  ModelModeSwitch,
+  type OcrModelMode,
+} from "./ModelModeSwitch";
 
 interface FileUploadProps {
   onUpload: (
     file: File,
     onProgress: (percent: number) => void,
   ) => Promise<void>;
+  modelMode?: OcrModelMode;
+  onModelModeChange?: (mode: OcrModelMode) => void;
+  customModelAvailable?: boolean;
 }
 
-export const FileUpload: React.FC<FileUploadProps> = ({ onUpload }) => {
+export const FileUpload: React.FC<FileUploadProps> = ({
+  onUpload,
+  modelMode,
+  onModelModeChange,
+  customModelAvailable = true,
+}) => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
 
@@ -47,13 +59,28 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onUpload }) => {
     <div
       {...getRootProps()}
       className={cn(
-        "border-2 border-dashed rounded-xl p-6 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center gap-3 group",
+        "relative border-2 border-dashed rounded-xl p-6 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center gap-3 group",
         isDragActive
           ? "border-blue-500 bg-blue-50 scale-[1.02]"
           : "border-gray-300 hover:border-blue-400 hover:bg-blue-50/40 bg-white",
       )}
     >
       <input {...getInputProps()} />
+
+      {modelMode && onModelModeChange ? (
+        <div
+          className="absolute top-3 right-3 z-10"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <ModelModeSwitch
+            value={modelMode}
+            onChange={onModelModeChange}
+            customAvailable={customModelAvailable}
+            loading={uploading}
+            compact
+          />
+        </div>
+      ) : null}
 
       <div className="relative">
         <div

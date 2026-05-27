@@ -138,7 +138,7 @@ class OCRService:
         return task
 
     @staticmethod
-    async def process_task_logic(task_id: int):
+    async def process_task_logic(task_id: int, use_local_models: bool | None = None):
         from sqlalchemy.pool import NullPool
         from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
         from sqlalchemy.orm import sessionmaker
@@ -201,7 +201,10 @@ class OCRService:
                     ocr_provider = get_ocr_provider()
                     try:
                         api_result = await asyncio.wait_for(
-                            ocr_provider.ocr_general_basic(processed_data),
+                            ocr_provider.ocr_general_basic(
+                                processed_data,
+                                use_local_models=use_local_models,
+                            ),
                             timeout=settings.OCR_INFERENCE_TIMEOUT_SEC,
                         )
                     except asyncio.TimeoutError:

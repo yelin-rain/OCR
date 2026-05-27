@@ -84,6 +84,7 @@ _注意：修改代码后，API 和 Celery 两个终端都需要重启才能生�
 cd frontend
 npm install
 npm run dev
+npm run dev -- --host 0.0.0.0
 ```
 
 ### 4. 使用数据库 (Database)
@@ -92,6 +93,70 @@ npm run dev
 docker compose exec db psql -U ocr_user -d ocr_db -c "ALTER USER ocr_user WITH PASSWORD '12345678';"
 \dt
 ```
+
+## 局域网访问（同 WiFi 演示）
+
+让同一局域网内的同学通过浏览器使用本机服务：
+
+1. **查本机 WLAN 的 IPv4**（不要用 WSL 的 `172.31.x.x`）：
+
+   ```bash
+   ipconfig
+   ```
+
+   使用 **WLAN** 网卡地址，例如 `10.114.212.23`。
+
+2. **启动服务**（均需在本机运行）：
+   - 基础设施：`docker compose up -d`（Redis / Postgres / MinIO）
+   - 后端：`uvicorn main:app --host 0.0.0.0 --port 8000`
+   - Celery：见上文 Windows 命令
+   - 前端：`cd frontend && npm run dev`（已配置监听 `0.0.0.0`）
+
+3. **发给对方的链接**：
+
+   ```text
+   http://<你的WLAN的IP>:5173
+   ```
+
+   例如 `http://10.114.212.23:5173`。
+
+4. **API 地址**：前端会根据访问页面的 IP 自动请求 `http://<同一IP>:8000`，无需同学改 `localhost`。若需固定 API，可复制 `frontend/.env.lan.example` 为 `.env.local` 并设置 `VITE_API_BASE`。
+
+5. **防火墙**：放行 **5173**（前端）、**8000**（API）即可；任务图片经 API 代理返回，一般**不必**对同学开放 MinIO 的 9000 端口。
+
+6. **图片**：任务 `file_url` 会生成为 `http://<你的IP>:8000/ocr/task/{id}/file?token=...`，局域网内可直接显示。修改后端后需**重启 uvicorn**，并让同学**刷新页面**重新拉取任务列表。
+
+7. **自检**：在本机浏览器用 **IP 地址**（不要用 `localhost`）打开上述链接，能注册登录后再让同学访问。
+
+8. **校园网**：部分 WiFi 开启「客户端隔离」，设备之间无法互访；可改用手机热点测试。
+
+## 本地自训练模型（det + rec）
+
+`server/.env` 中保持：
+
+```env
+OCR_PROVIDER=local
+USE_LOCAL_MODELS=True
+```
+
+识别模型目录：`server/app/inference_models/crnn_ctc_rare`（由 `rec_rare_2` 导出）  
+检测模型目录：`server/app/inference_models/det_db_resnet50_cbam`（由 `db_resnet50_cbam` 导出）
+
+重新导出识别模型（在 `server` 目录，Paddle 3.3 需 PIR 导出）：
+
+```bash
+cd modal/PaddleOCR
+FLAGS_enable_pir_api=1 python tools/export_model.py \
+  -c output/rec_rare_2/config.yml \
+  -o Global.save_inference_dir=C:/ocr_export/rec_pir \
+  Global.pretrained_model=output/rec_rare_2/best_accuracy \
+  Global.use_gpu=False Global.export_with_pir=True
+```
+
+然后将 `inference.json`、`inference.pdiparams`、`inference.yml` 复制到 `crnn_ctc_rare/`。  
+也可用：`python scripts/export_paddleocr_models.py export --skip-det ...`（见脚本注释）。
+
+安装或更新模型后，**必须重启 API 与 Celery**，启动日志应出现 `local-det_db_resnet50_cbam+rec_rare_2`。
 
 ## 功能使用
 

@@ -2,6 +2,7 @@ from minio import Minio
 from minio.error import S3Error
 from app.core.config import settings
 import io
+from urllib.parse import urlparse, urlunparse
 
 class StorageProvider:
     def __init__(self):
@@ -34,11 +35,28 @@ class StorageProvider:
 
     def get_file_url(self, filename: str) -> str:
         """Generate a presigned URL for the file."""
-        return self.client.get_presigned_url(
+        url = self.client.get_presigned_url(
             "GET",
             settings.MINIO_BUCKET_NAME,
             filename,
         )
+        return self._rewrite_public_host(url)
+
+    def _rewrite_public_host(self, url: str) -> str:
+        public_host = settings.MINIO_PUBLIC_HOST
+        if not public_host:
+            return url
+        parsed = urlparse(url)
+        scheme = "https" if settings.MINIO_SECURE else "http"
+        if "://" not in public_host:
+            netloc = public_host
+        else:
+            public_parsed = urlparse(
+                public_host if "://" in public_host else f"//{public_host}"
+            )
+            scheme = public_parsed.scheme or scheme
+            netloc = public_parsed.netloc or public_parsed.path
+        return urlunparse((scheme, netloc, parsed.path, parsed.params, parsed.query, parsed.fragment))
 
     def download_file(self, filename: str) -> bytes:
         """Download file content as bytes."""

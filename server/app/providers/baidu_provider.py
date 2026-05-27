@@ -7,7 +7,11 @@ class BaiduOCRProvider:
     """
     Provider for Baidu AI Studio PaddleOCR-VL API (V2 Jobs).
     """
-    async def ocr_general_basic(self, image_bytes: bytes) -> Dict[str, Any]:
+    async def ocr_general_basic(
+        self,
+        image_bytes: bytes,
+        use_local_models: bool | None = None,
+    ) -> Dict[str, Any]:
         """
         通过 AI Studio V2 Jobs 接口进行图片文字识别
         1. POST /jobs (multipart/form-data) 获取 jobId

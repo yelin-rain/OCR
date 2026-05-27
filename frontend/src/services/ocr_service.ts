@@ -1,8 +1,48 @@
 import { httpClient } from "../providers/http_provider";
 import type { Task } from "../models/task";
 
+export type OcrModelModeOption = {
+  id: "official" | "custom";
+  use_local_models: boolean;
+  label: string;
+  description: string;
+  available?: boolean;
+};
+
+export type OcrModelOptions = {
+  provider: string;
+  default_use_local_models: boolean;
+  local_models_available: boolean;
+  modes: OcrModelModeOption[];
+};
+
+export const MODEL_MODE_STORAGE_KEY = "ocr_model_mode";
+
+export function loadStoredModelMode(): "official" | "custom" {
+  const stored = localStorage.getItem(MODEL_MODE_STORAGE_KEY);
+  if (stored === "official" || stored === "custom") {
+    return stored;
+  }
+  return "official";
+}
+
+export function saveStoredModelMode(mode: "official" | "custom") {
+  localStorage.setItem(MODEL_MODE_STORAGE_KEY, mode);
+}
+
 export const OCRService = {
-    async uploadTask(file: File, onProgress?: (percent: number) => void): Promise<Task> {
+    async getModelOptions(): Promise<OcrModelOptions> {
+        const response = await httpClient.get<OcrModelOptions>("/ocr/model-options");
+        return response.data;
+    },
+
+    async uploadTask(
+        file: File,
+        options?: {
+            onProgress?: (percent: number) => void;
+            useLocalModels?: boolean;
+        },
+    ): Promise<Task> {
         const formData = new FormData();
         formData.append('file', file);
 
@@ -10,10 +50,14 @@ export const OCRService = {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
+            params:
+                options?.useLocalModels === undefined
+                    ? undefined
+                    : { use_local_models: options.useLocalModels },
             onUploadProgress: (progressEvent) => {
-                if (onProgress) {
+                if (options?.onProgress) {
                     const percentCompleted = Math.round((progressEvent.loaded * 100) / (progressEvent.total || 100));
-                    onProgress(percentCompleted);
+                    options.onProgress(percentCompleted);
                 }
             }
         });

@@ -37,6 +37,36 @@ def create_access_token(subject: Union[str, Any], expires_delta: timedelta = Non
     return encoded_jwt
 
 
+def create_file_view_token(task_id: int, owner_id: int, expires_hours: int = 24) -> str:
+    """供 <img src> 使用的短期任务图片访问令牌（含在 URL 查询参数中）。"""
+    expire = datetime.utcnow() + timedelta(hours=expires_hours)
+    to_encode = {
+        "exp": expire,
+        "sub": str(owner_id),
+        "task_id": task_id,
+        "type": "file_view",
+    }
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+
+def verify_file_view_token(token: str, task_id: int) -> int:
+    """校验图片访问令牌，返回 owner_id。"""
+    from jose import JWTError
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    except JWTError as exc:
+        raise ValueError("invalid file token") from exc
+    if payload.get("type") != "file_view":
+        raise ValueError("invalid file token type")
+    if int(payload.get("task_id", -1)) != task_id:
+        raise ValueError("task id mismatch")
+    owner_id = payload.get("sub")
+    if owner_id is None:
+        raise ValueError("missing owner")
+    return int(owner_id)
+
+
 def create_refresh_token(
     subject: Union[str, Any], expires_delta: Union[timedelta, None] = None
 ) -> str:

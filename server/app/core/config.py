@@ -26,6 +26,13 @@ class Settings(BaseSettings):
     MINIO_ROOT_PASSWORD: str = "minio_password"
     MINIO_BUCKET_NAME: str = "ocr-tasks"
     MINIO_SECURE: bool = False
+    # 局域网直连 MinIO 预签名 URL 时使用，例如 10.114.212.23:9000（一般不必配，优先走 API 代理）
+    MINIO_PUBLIC_ENDPOINT: str = ""
+
+    @property
+    def MINIO_PUBLIC_HOST(self) -> str | None:
+        value = (self.MINIO_PUBLIC_ENDPOINT or "").strip()
+        return value or None
 
     @property
     def MINIO_ACCESS_KEY(self):

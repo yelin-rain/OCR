@@ -59,15 +59,16 @@ def _default_rec_target() -> Path:
     return _server_root() / "app" / "inference_models" / "crnn_ctc_rare"
 
 
-REQUIRED_INFERENCE_FILES = ("inference.pdmodel", "inference.pdiparams")
-
-
 def _assert_inference_dir(label: str, src: Path) -> None:
     if not src.is_dir():
         raise SystemExit(f"{label}: 不是目录: {src}")
-    missing = [f for f in REQUIRED_INFERENCE_FILES if not (src / f).is_file()]
-    if missing:
-        raise SystemExit(f"{label}: 缺少文件 {missing}，目录: {src}")
+    pdiparams = src / "inference.pdiparams"
+    if not pdiparams.is_file():
+        raise SystemExit(f"{label}: 缺少 inference.pdiparams，目录: {src}")
+    if not (src / "inference.pdmodel").is_file() and not (src / "inference.json").is_file():
+        raise SystemExit(
+            f"{label}: 缺少 inference.pdmodel 或 inference.json，目录: {src}"
+        )
 
 
 def _copy_tree_contents(src: Path, dst: Path) -> None:
@@ -101,11 +102,9 @@ def cmd_copy(args: argparse.Namespace) -> int:
 
 
 def _has_inference_pair(d: Path) -> bool:
-    return (
-        d.is_dir()
-        and (d / "inference.pdmodel").is_file()
-        and (d / "inference.pdiparams").is_file()
-    )
+    if not d.is_dir() or not (d / "inference.pdiparams").is_file():
+        return False
+    return (d / "inference.pdmodel").is_file() or (d / "inference.json").is_file()
 
 
 def _find_inference_subdir(out_dir: Path, max_depth: int = 5) -> Path | None:
@@ -192,10 +191,11 @@ def _run_export(
     # tools/program.py 要求每个 -o 为 key=value；路径用 POSIX 避免 Windows 反斜杠被 yaml 误解析
     save_root = out_dir.resolve().as_posix()
     pre_str = pre_for_paddle.as_posix()
+    use_pir = True  # Paddle 3.3 + MultiHead（rec_rare_2）在 Windows 上需 PIR 导出
     opts: list[str] = [
         f"Global.save_inference_dir={save_root}",
         f"Global.pretrained_model={pre_str}",
-        "Global.export_with_pir=False",
+        f"Global.export_with_pir={'True' if use_pir else 'False'}",
     ]
     if cpu_export:
         opts.append("Global.use_gpu=False")
@@ -205,8 +205,10 @@ def _run_export(
         opts.append(opt)
     cmd = [sys.executable, str(export_py), "-c", str(config_path), "-o", *opts]
     env = os.environ.copy()
-    # Windows + Paddle 3.x 在导出静态图时可能走到 PIR 路径，触发 Value/Variable 类型不兼容。
-    env.setdefault("FLAGS_enable_pir_api", "0")
+    if use_pir:
+        env["FLAGS_enable_pir_api"] = "1"
+    else:
+        env.setdefault("FLAGS_enable_pir_api", "0")
     env.setdefault("FLAGS_enable_onednn", "0")
     env.setdefault("FLAGS_use_mkldnn", "0")
     print(f"[{label}] 执行: {' '.join(cmd)}")
