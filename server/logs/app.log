@@ -1730,3 +1730,1306 @@ WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
 2026-05-27 17:30:26 | INFO | sqlalchemy.engine.Engine | ROLLBACK
 2026-05-27 17:30:26 | INFO | sqlalchemy.engine.Engine | ROLLBACK
 2026-05-27 17:30:26 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | [cached since 887s ago] ('yyy',)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | [cached since 887.2s ago] ('yyy',)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | [cached since 887.3s ago] ('yyy',)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | [cached since 887.3s ago] ('yyy',)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | [cached since 887.3s ago] (4, 20, 0)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | [cached since 887.4s ago] ('yyy',)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | [cached since 887.4s ago] ('yyy',)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | [cached since 887.4s ago] (4, 20, 0)
+2026-05-27 17:37:46 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | [cached since 912.3s ago] ('yyy',)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | INSERT INTO ocr_tasks (celery_task_id, filename, file_path, status, created_at, completed_at, result, correction_log, model_version, inference_ms, avg_confidence, image_width, image_height, owner_id) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::taskstatus, $5::TIMESTAMP WITHOUT TIME ZONE, $6::TIMESTAMP WITHOUT TIME ZONE, $7::VARCHAR, $8::VARCHAR, $9::VARCHAR, $10::FLOAT, $11::FLOAT, $12::INTEGER, $13::INTEGER, $14::INTEGER) RETURNING ocr_tasks.id
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | [cached since 623.1s ago] (None, '小说图片2.png', 'ae9689ae-4264-46c4-994e-8bc7ef6b321a.png', 'PENDING', datetime.datetime(2026, 5, 27, 9, 38, 11, 687083), None, None, None, None, None, None, None, None, 4)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | [cached since 623s ago] (97,)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | SELECT ocr_run_metrics.id, ocr_run_metrics.task_id, ocr_run_metrics.owner_id, ocr_run_metrics.http_latency_ms, ocr_run_metrics.image_size_bytes, ocr_run_metrics.inference_ms, ocr_run_metrics.avg_confidence, ocr_run_metrics.image_width, ocr_run_metrics.image_height, ocr_run_metrics.created_at, ocr_run_metrics.updated_at 
+FROM ocr_run_metrics 
+WHERE ocr_run_metrics.task_id = $1::INTEGER
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | [cached since 623s ago] (97,)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | INSERT INTO ocr_run_metrics (task_id, owner_id, http_latency_ms, image_size_bytes, inference_ms, avg_confidence, image_width, image_height, created_at, updated_at) VALUES ($1::INTEGER, $2::INTEGER, $3::FLOAT, $4::INTEGER, $5::FLOAT, $6::FLOAT, $7::INTEGER, $8::INTEGER, $9::TIMESTAMP WITHOUT TIME ZONE, $10::TIMESTAMP WITHOUT TIME ZONE) RETURNING ocr_run_metrics.id
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | [cached since 623s ago] (97, 4, 48.09169998043217, 190928, None, None, None, None, datetime.datetime(2026, 5, 27, 9, 38, 11, 766760), datetime.datetime(2026, 5, 27, 9, 38, 11, 766760))
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | SELECT ocr_run_metrics.id, ocr_run_metrics.task_id, ocr_run_metrics.owner_id, ocr_run_metrics.http_latency_ms, ocr_run_metrics.image_size_bytes, ocr_run_metrics.inference_ms, ocr_run_metrics.avg_confidence, ocr_run_metrics.image_width, ocr_run_metrics.image_height, ocr_run_metrics.created_at, ocr_run_metrics.updated_at 
+FROM ocr_run_metrics 
+WHERE ocr_run_metrics.id = $1::INTEGER
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | [cached since 623s ago] (44,)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | UPDATE ocr_tasks SET celery_task_id=$1::VARCHAR WHERE ocr_tasks.id = $2::INTEGER
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | [cached since 622.9s ago] ('35975555-f7ac-4729-95a3-80cec66f6c70', 97)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | [cached since 912.5s ago] ('yyy',)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | [cached since 912.5s ago] (4, 20, 0)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | [cached since 912.4s ago] (97, 4)
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:11 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:13 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:13 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:13 | INFO | sqlalchemy.engine.Engine | [cached since 914.6s ago] ('yyy',)
+2026-05-27 17:38:13 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:13 | INFO | sqlalchemy.engine.Engine | [cached since 914.6s ago] (4, 20, 0)
+2026-05-27 17:38:14 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:14 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:14 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:14 | INFO | sqlalchemy.engine.Engine | [cached since 914.5s ago] (97, 4)
+2026-05-27 17:38:14 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:16 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:16 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:16 | INFO | sqlalchemy.engine.Engine | [cached since 916.7s ago] ('yyy',)
+2026-05-27 17:38:16 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:16 | INFO | sqlalchemy.engine.Engine | [cached since 916.7s ago] (4, 20, 0)
+2026-05-27 17:38:16 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:16 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:16 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:16 | INFO | sqlalchemy.engine.Engine | [cached since 916.6s ago] (97, 4)
+2026-05-27 17:38:16 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:18 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:18 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:18 | INFO | sqlalchemy.engine.Engine | [cached since 919.1s ago] ('yyy',)
+2026-05-27 17:38:18 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:18 | INFO | sqlalchemy.engine.Engine | [cached since 919.1s ago] (4, 20, 0)
+2026-05-27 17:38:18 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:18 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:18 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:18 | INFO | sqlalchemy.engine.Engine | [cached since 919s ago] (97, 4)
+2026-05-27 17:38:18 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:20 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:20 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:20 | INFO | sqlalchemy.engine.Engine | [cached since 921.2s ago] ('yyy',)
+2026-05-27 17:38:20 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:20 | INFO | sqlalchemy.engine.Engine | [cached since 921.2s ago] (4, 20, 0)
+2026-05-27 17:38:20 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:20 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:20 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:20 | INFO | sqlalchemy.engine.Engine | [cached since 921.1s ago] (97, 4)
+2026-05-27 17:38:20 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:22 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:22 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:22 | INFO | sqlalchemy.engine.Engine | [cached since 923.3s ago] ('yyy',)
+2026-05-27 17:38:22 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:22 | INFO | sqlalchemy.engine.Engine | [cached since 923.3s ago] (4, 20, 0)
+2026-05-27 17:38:22 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:22 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:22 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:22 | INFO | sqlalchemy.engine.Engine | [cached since 923.2s ago] (97, 4)
+2026-05-27 17:38:22 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:25 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:25 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:25 | INFO | sqlalchemy.engine.Engine | [cached since 925.7s ago] ('yyy',)
+2026-05-27 17:38:25 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:25 | INFO | sqlalchemy.engine.Engine | [cached since 925.7s ago] (4, 20, 0)
+2026-05-27 17:38:25 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:25 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:25 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:25 | INFO | sqlalchemy.engine.Engine | [cached since 925.6s ago] (97, 4)
+2026-05-27 17:38:25 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | [cached since 926.8s ago] ('yyy',)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | INSERT INTO ocr_tasks (celery_task_id, filename, file_path, status, created_at, completed_at, result, correction_log, model_version, inference_ms, avg_confidence, image_width, image_height, owner_id) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::taskstatus, $5::TIMESTAMP WITHOUT TIME ZONE, $6::TIMESTAMP WITHOUT TIME ZONE, $7::VARCHAR, $8::VARCHAR, $9::VARCHAR, $10::FLOAT, $11::FLOAT, $12::INTEGER, $13::INTEGER, $14::INTEGER) RETURNING ocr_tasks.id
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | [cached since 637.6s ago] (None, '截图1.jpg', '97d55ce7-6c49-480b-a2d0-35acbcc61807.jpg', 'PENDING', datetime.datetime(2026, 5, 27, 9, 38, 26, 256678), None, None, None, None, None, None, None, None, 4)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | [cached since 637.6s ago] (98,)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | SELECT ocr_run_metrics.id, ocr_run_metrics.task_id, ocr_run_metrics.owner_id, ocr_run_metrics.http_latency_ms, ocr_run_metrics.image_size_bytes, ocr_run_metrics.inference_ms, ocr_run_metrics.avg_confidence, ocr_run_metrics.image_width, ocr_run_metrics.image_height, ocr_run_metrics.created_at, ocr_run_metrics.updated_at 
+FROM ocr_run_metrics 
+WHERE ocr_run_metrics.task_id = $1::INTEGER
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | [cached since 637.6s ago] (98,)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | INSERT INTO ocr_run_metrics (task_id, owner_id, http_latency_ms, image_size_bytes, inference_ms, avg_confidence, image_width, image_height, created_at, updated_at) VALUES ($1::INTEGER, $2::INTEGER, $3::FLOAT, $4::INTEGER, $5::FLOAT, $6::FLOAT, $7::INTEGER, $8::INTEGER, $9::TIMESTAMP WITHOUT TIME ZONE, $10::TIMESTAMP WITHOUT TIME ZONE) RETURNING ocr_run_metrics.id
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | [cached since 637.6s ago] (98, 4, 53.01920001511462, 234247, None, None, None, None, datetime.datetime(2026, 5, 27, 9, 38, 26, 328375), datetime.datetime(2026, 5, 27, 9, 38, 26, 328375))
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | SELECT ocr_run_metrics.id, ocr_run_metrics.task_id, ocr_run_metrics.owner_id, ocr_run_metrics.http_latency_ms, ocr_run_metrics.image_size_bytes, ocr_run_metrics.inference_ms, ocr_run_metrics.avg_confidence, ocr_run_metrics.image_width, ocr_run_metrics.image_height, ocr_run_metrics.created_at, ocr_run_metrics.updated_at 
+FROM ocr_run_metrics 
+WHERE ocr_run_metrics.id = $1::INTEGER
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | [cached since 637.6s ago] (45,)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | UPDATE ocr_tasks SET celery_task_id=$1::VARCHAR WHERE ocr_tasks.id = $2::INTEGER
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | [cached since 637.5s ago] ('1869d8fc-c2e0-4aa4-a4ff-2ad1a47b8770', 98)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | [cached since 927.1s ago] ('yyy',)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | [cached since 927.1s ago] (4, 20, 0)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | [cached since 926.9s ago] (98, 4)
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:26 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:27 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:27 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:27 | INFO | sqlalchemy.engine.Engine | [cached since 928s ago] (97, 4)
+2026-05-27 17:38:27 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:28 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:28 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:28 | INFO | sqlalchemy.engine.Engine | [cached since 929.2s ago] ('yyy',)
+2026-05-27 17:38:28 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:28 | INFO | sqlalchemy.engine.Engine | [cached since 929.2s ago] (4, 20, 0)
+2026-05-27 17:38:28 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:28 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:28 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:28 | INFO | sqlalchemy.engine.Engine | [cached since 929.1s ago] (97, 4)
+2026-05-27 17:38:28 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:30 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:30 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:30 | INFO | sqlalchemy.engine.Engine | [cached since 931.3s ago] ('yyy',)
+2026-05-27 17:38:30 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:30 | INFO | sqlalchemy.engine.Engine | [cached since 931.3s ago] (4, 20, 0)
+2026-05-27 17:38:30 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:30 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:30 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:30 | INFO | sqlalchemy.engine.Engine | [cached since 931.2s ago] (97, 4)
+2026-05-27 17:38:30 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:32 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:32 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:32 | INFO | sqlalchemy.engine.Engine | [cached since 933.3s ago] ('yyy',)
+2026-05-27 17:38:32 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:32 | INFO | sqlalchemy.engine.Engine | [cached since 933.3s ago] (4, 20, 0)
+2026-05-27 17:38:32 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:32 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:32 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:32 | INFO | sqlalchemy.engine.Engine | [cached since 933.3s ago] (97, 4)
+2026-05-27 17:38:32 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:34 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:34 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:34 | INFO | sqlalchemy.engine.Engine | [cached since 935.4s ago] ('yyy',)
+2026-05-27 17:38:34 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:34 | INFO | sqlalchemy.engine.Engine | [cached since 935.4s ago] (4, 20, 0)
+2026-05-27 17:38:34 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:34 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:34 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:34 | INFO | sqlalchemy.engine.Engine | [cached since 935.4s ago] (97, 4)
+2026-05-27 17:38:34 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:36 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:36 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:36 | INFO | sqlalchemy.engine.Engine | [cached since 937.5s ago] ('yyy',)
+2026-05-27 17:38:36 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:36 | INFO | sqlalchemy.engine.Engine | [cached since 937.5s ago] (4, 20, 0)
+2026-05-27 17:38:36 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:36 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:36 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:36 | INFO | sqlalchemy.engine.Engine | [cached since 937.4s ago] (97, 4)
+2026-05-27 17:38:37 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:38 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:38 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:38:38 | INFO | sqlalchemy.engine.Engine | [cached since 939.6s ago] ('yyy',)
+2026-05-27 17:38:38 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:38:38 | INFO | sqlalchemy.engine.Engine | [cached since 939.6s ago] (4, 20, 0)
+2026-05-27 17:38:39 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:38:39 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:38:39 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:38:39 | INFO | sqlalchemy.engine.Engine | [cached since 939.5s ago] (97, 4)
+2026-05-27 17:38:39 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:07 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:07 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:39:07 | INFO | sqlalchemy.engine.Engine | [cached since 967.9s ago] (98, 4)
+2026-05-27 17:39:07 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 971.6s ago] ('yyy',)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 971.7s ago] (4, 20, 0)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 971.7s ago] ('yyy',)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT date_trunc($1::VARCHAR, ocr_tasks.completed_at) AS bucket, avg(ocr_tasks.inference_ms) AS avg_ms, count(ocr_tasks.id) AS cnt 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $2::INTEGER AND ocr_tasks.status = $3::taskstatus AND ocr_tasks.completed_at IS NOT NULL AND ocr_tasks.completed_at >= $4::TIMESTAMP WITHOUT TIME ZONE AND ocr_tasks.inference_ms IS NOT NULL GROUP BY date_trunc($1::VARCHAR, ocr_tasks.completed_at) ORDER BY bucket
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.2s ago] ('hour', 4, 'COMPLETED', datetime.datetime(2026, 5, 26, 9, 39, 11, 60998))
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER AND ocr_tasks.status = $2::taskstatus AND ocr_tasks.avg_confidence IS NOT NULL AND ocr_tasks.avg_confidence < $3::FLOAT ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $4::INTEGER
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.2s ago] (4, 'COMPLETED', 0.8, 50)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.status, count(ocr_tasks.id) AS count_1 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER AND ocr_tasks.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE GROUP BY ocr_tasks.status
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.2s ago] (4, datetime.datetime(2026, 5, 26, 9, 39, 11, 87737))
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 971.8s ago] ('yyy',)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER AND (ocr_tasks.status = $2::taskstatus AND ocr_tasks.avg_confidence IS NOT NULL AND ocr_tasks.avg_confidence < $3::FLOAT OR ocr_tasks.status = $4::taskstatus) ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $5::INTEGER
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.2s ago] (4, 'COMPLETED', 0.8, 'FAILED', 30)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 971.8s ago] ('yyy',)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.level = $1::VARCHAR AND system_logs.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.2s ago] ('ERROR', datetime.datetime(2026, 5, 26, 9, 39, 11, 172890))
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.level = $1::VARCHAR AND system_logs.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.2s ago] ('WARNING', datetime.datetime(2026, 5, 26, 9, 39, 11, 172890))
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.created_at >= $1::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.2s ago] (datetime.datetime(2026, 5, 26, 9, 39, 11, 172890),)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT data_backup_records.id, data_backup_records.filename, data_backup_records.file_path, data_backup_records.size_bytes, data_backup_records.success, data_backup_records.error_message, data_backup_records.created_by_user_id, data_backup_records.created_at 
+FROM data_backup_records ORDER BY data_backup_records.created_at DESC 
+ LIMIT $1::INTEGER
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.2s ago] (1,)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 971.9s ago] ('yyy',)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT system_logs.id, system_logs.level, system_logs.source, system_logs.message, system_logs.detail, system_logs.path, system_logs.user_id, system_logs.created_at 
+FROM system_logs ORDER BY system_logs.created_at DESC 
+ LIMIT $1::INTEGER
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.2s ago] (30,)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 971.9s ago] ('yyy',)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 971.9s ago] (4, 20, 0)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 972s ago] ('yyy',)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 972s ago] ('yyy',)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.level = $1::VARCHAR AND system_logs.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.4s ago] ('ERROR', datetime.datetime(2026, 5, 26, 9, 39, 11, 361300))
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT system_logs.id, system_logs.level, system_logs.source, system_logs.message, system_logs.detail, system_logs.path, system_logs.user_id, system_logs.created_at 
+FROM system_logs ORDER BY system_logs.created_at DESC 
+ LIMIT $1::INTEGER
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.3s ago] (30,)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.level = $1::VARCHAR AND system_logs.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.4s ago] ('WARNING', datetime.datetime(2026, 5, 26, 9, 39, 11, 361300))
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.created_at >= $1::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.4s ago] (datetime.datetime(2026, 5, 26, 9, 39, 11, 361300),)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | SELECT data_backup_records.id, data_backup_records.filename, data_backup_records.file_path, data_backup_records.size_bytes, data_backup_records.success, data_backup_records.error_message, data_backup_records.created_by_user_id, data_backup_records.created_at 
+FROM data_backup_records ORDER BY data_backup_records.created_at DESC 
+ LIMIT $1::INTEGER
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | [cached since 610.4s ago] (1,)
+2026-05-27 17:39:11 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:14 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:14 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:14 | INFO | sqlalchemy.engine.Engine | [cached since 974.6s ago] ('yyy',)
+2026-05-27 17:39:14 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:39:14 | INFO | sqlalchemy.engine.Engine | [cached since 974.6s ago] (4, 20, 0)
+2026-05-27 17:39:14 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:17 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:17 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:17 | INFO | sqlalchemy.engine.Engine | [cached since 977.6s ago] ('yyy',)
+2026-05-27 17:39:17 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:39:17 | INFO | sqlalchemy.engine.Engine | [cached since 977.6s ago] (4, 20, 0)
+2026-05-27 17:39:17 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:20 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:20 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:20 | INFO | sqlalchemy.engine.Engine | [cached since 980.9s ago] ('yyy',)
+2026-05-27 17:39:20 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:39:20 | INFO | sqlalchemy.engine.Engine | [cached since 980.9s ago] (4, 20, 0)
+2026-05-27 17:39:20 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:21 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:21 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:21 | INFO | sqlalchemy.engine.Engine | [cached since 981.8s ago] ('yyy',)
+2026-05-27 17:39:21 | INFO | sqlalchemy.engine.Engine | SELECT date_trunc($1::VARCHAR, ocr_tasks.completed_at) AS bucket, avg(ocr_tasks.inference_ms) AS avg_ms, count(ocr_tasks.id) AS cnt 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $2::INTEGER AND ocr_tasks.status = $3::taskstatus AND ocr_tasks.completed_at IS NOT NULL AND ocr_tasks.completed_at >= $4::TIMESTAMP WITHOUT TIME ZONE AND ocr_tasks.inference_ms IS NOT NULL GROUP BY date_trunc($1::VARCHAR, ocr_tasks.completed_at) ORDER BY bucket
+2026-05-27 17:39:21 | INFO | sqlalchemy.engine.Engine | [cached since 620.3s ago] ('hour', 4, 'COMPLETED', datetime.datetime(2026, 5, 26, 9, 39, 21, 156967))
+2026-05-27 17:39:21 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER AND ocr_tasks.status = $2::taskstatus AND ocr_tasks.avg_confidence IS NOT NULL AND ocr_tasks.avg_confidence < $3::FLOAT ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $4::INTEGER
+2026-05-27 17:39:21 | INFO | sqlalchemy.engine.Engine | [cached since 620.3s ago] (4, 'COMPLETED', 0.8, 50)
+2026-05-27 17:39:21 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.status, count(ocr_tasks.id) AS count_1 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER AND ocr_tasks.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE GROUP BY ocr_tasks.status
+2026-05-27 17:39:21 | INFO | sqlalchemy.engine.Engine | [cached since 620.3s ago] (4, datetime.datetime(2026, 5, 26, 9, 39, 21, 176216))
+2026-05-27 17:39:21 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:23 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:23 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:23 | INFO | sqlalchemy.engine.Engine | [cached since 983.6s ago] ('yyy',)
+2026-05-27 17:39:23 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:39:23 | INFO | sqlalchemy.engine.Engine | [cached since 983.6s ago] (4, 20, 0)
+2026-05-27 17:39:23 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:23 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:23 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:23 | INFO | sqlalchemy.engine.Engine | [cached since 983.9s ago] ('yyy',)
+2026-05-27 17:39:23 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER AND (ocr_tasks.status = $2::taskstatus AND ocr_tasks.avg_confidence IS NOT NULL AND ocr_tasks.avg_confidence < $3::FLOAT OR ocr_tasks.status = $4::taskstatus) ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $5::INTEGER
+2026-05-27 17:39:23 | INFO | sqlalchemy.engine.Engine | [cached since 622.3s ago] (4, 'COMPLETED', 0.8, 'FAILED', 30)
+2026-05-27 17:39:23 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | [cached since 986.7s ago] ('yyy',)
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | [cached since 986.7s ago] ('yyy',)
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | [cached since 986.7s ago] (4, 20, 0)
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.level = $1::VARCHAR AND system_logs.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | [cached since 625.1s ago] ('ERROR', datetime.datetime(2026, 5, 26, 9, 39, 26, 36905))
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.level = $1::VARCHAR AND system_logs.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | [cached since 625.1s ago] ('WARNING', datetime.datetime(2026, 5, 26, 9, 39, 26, 36905))
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.created_at >= $1::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | [cached since 625.1s ago] (datetime.datetime(2026, 5, 26, 9, 39, 26, 36905),)
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | SELECT data_backup_records.id, data_backup_records.filename, data_backup_records.file_path, data_backup_records.size_bytes, data_backup_records.success, data_backup_records.error_message, data_backup_records.created_by_user_id, data_backup_records.created_at 
+FROM data_backup_records ORDER BY data_backup_records.created_at DESC 
+ LIMIT $1::INTEGER
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | [cached since 625.1s ago] (1,)
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | [cached since 986.7s ago] ('yyy',)
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | SELECT system_logs.id, system_logs.level, system_logs.source, system_logs.message, system_logs.detail, system_logs.path, system_logs.user_id, system_logs.created_at 
+FROM system_logs ORDER BY system_logs.created_at DESC 
+ LIMIT $1::INTEGER
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | [cached since 625s ago] (30,)
+2026-05-27 17:39:26 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:29 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:29 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:29 | INFO | sqlalchemy.engine.Engine | [cached since 989.6s ago] ('yyy',)
+2026-05-27 17:39:29 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:39:29 | INFO | sqlalchemy.engine.Engine | [cached since 989.6s ago] (4, 20, 0)
+2026-05-27 17:39:29 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:31 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:31 | INFO | sqlalchemy.engine.Engine | [cached since 991.8s ago] ('yyy',)
+2026-05-27 17:39:31 | INFO | sqlalchemy.engine.Engine | SELECT date_trunc($1::VARCHAR, ocr_tasks.completed_at) AS bucket, avg(ocr_tasks.inference_ms) AS avg_ms, count(ocr_tasks.id) AS cnt 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $2::INTEGER AND ocr_tasks.status = $3::taskstatus AND ocr_tasks.completed_at IS NOT NULL AND ocr_tasks.completed_at >= $4::TIMESTAMP WITHOUT TIME ZONE AND ocr_tasks.inference_ms IS NOT NULL GROUP BY date_trunc($1::VARCHAR, ocr_tasks.completed_at) ORDER BY bucket
+2026-05-27 17:39:31 | INFO | sqlalchemy.engine.Engine | [cached since 630.4s ago] ('hour', 4, 'COMPLETED', datetime.datetime(2026, 5, 26, 9, 39, 31, 217207))
+2026-05-27 17:39:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER AND ocr_tasks.status = $2::taskstatus AND ocr_tasks.avg_confidence IS NOT NULL AND ocr_tasks.avg_confidence < $3::FLOAT ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $4::INTEGER
+2026-05-27 17:39:31 | INFO | sqlalchemy.engine.Engine | [cached since 630.4s ago] (4, 'COMPLETED', 0.8, 50)
+2026-05-27 17:39:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.status, count(ocr_tasks.id) AS count_1 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER AND ocr_tasks.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE GROUP BY ocr_tasks.status
+2026-05-27 17:39:31 | INFO | sqlalchemy.engine.Engine | [cached since 630.4s ago] (4, datetime.datetime(2026, 5, 26, 9, 39, 31, 235071))
+2026-05-27 17:39:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:32 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:32 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:32 | INFO | sqlalchemy.engine.Engine | [cached since 992.9s ago] ('yyy',)
+2026-05-27 17:39:32 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:39:32 | INFO | sqlalchemy.engine.Engine | [cached since 992.9s ago] (4, 20, 0)
+2026-05-27 17:39:32 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | [cached since 1013s ago] ('yyy',)
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | [cached since 1013s ago] ('yyy',)
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | [cached since 1013s ago] ('yyy',)
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | [cached since 1013s ago] (4, 20, 0)
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | [cached since 1014s ago] ('yyy',)
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | [cached since 1014s ago] ('yyy',)
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:39:52 | INFO | sqlalchemy.engine.Engine | [cached since 1014s ago] (4, 20, 0)
+2026-05-27 17:39:53 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:39:53 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:39:53 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:39:53 | INFO | sqlalchemy.engine.Engine | [cached since 1014s ago] ('yyy',)
+2026-05-27 17:39:53 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:44 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:44 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:40:44 | INFO | sqlalchemy.engine.Engine | [cached since 1065s ago] ('yyy',)
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | [cached since 1066s ago] ('yyy',)
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | [cached since 1066s ago] ('yyy',)
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | [cached since 1066s ago] ('yyy',)
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | [cached since 1066s ago] (4, 20, 0)
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | [cached since 1066s ago] ('yyy',)
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | [cached since 1066s ago] ('yyy',)
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | [cached since 1066s ago] (4, 20, 0)
+2026-05-27 17:40:45 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | [cached since 1072s ago] ('yyy',)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | INSERT INTO ocr_tasks (celery_task_id, filename, file_path, status, created_at, completed_at, result, correction_log, model_version, inference_ms, avg_confidence, image_width, image_height, owner_id) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::taskstatus, $5::TIMESTAMP WITHOUT TIME ZONE, $6::TIMESTAMP WITHOUT TIME ZONE, $7::VARCHAR, $8::VARCHAR, $9::VARCHAR, $10::FLOAT, $11::FLOAT, $12::INTEGER, $13::INTEGER, $14::INTEGER) RETURNING ocr_tasks.id
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | [cached since 783s ago] (None, '小说图片1.png', '12a153f8-940a-4ee1-97b4-79a3d5816fa4.png', 'PENDING', datetime.datetime(2026, 5, 27, 9, 40, 51, 634294), None, None, None, None, None, None, None, None, 4)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | [cached since 783s ago] (99,)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | SELECT ocr_run_metrics.id, ocr_run_metrics.task_id, ocr_run_metrics.owner_id, ocr_run_metrics.http_latency_ms, ocr_run_metrics.image_size_bytes, ocr_run_metrics.inference_ms, ocr_run_metrics.avg_confidence, ocr_run_metrics.image_width, ocr_run_metrics.image_height, ocr_run_metrics.created_at, ocr_run_metrics.updated_at 
+FROM ocr_run_metrics 
+WHERE ocr_run_metrics.task_id = $1::INTEGER
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | [cached since 783s ago] (99,)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | INSERT INTO ocr_run_metrics (task_id, owner_id, http_latency_ms, image_size_bytes, inference_ms, avg_confidence, image_width, image_height, created_at, updated_at) VALUES ($1::INTEGER, $2::INTEGER, $3::FLOAT, $4::INTEGER, $5::FLOAT, $6::FLOAT, $7::INTEGER, $8::INTEGER, $9::TIMESTAMP WITHOUT TIME ZONE, $10::TIMESTAMP WITHOUT TIME ZONE) RETURNING ocr_run_metrics.id
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | [cached since 783s ago] (99, 4, 45.98470000200905, 215602, None, None, None, None, datetime.datetime(2026, 5, 27, 9, 40, 51, 717073), datetime.datetime(2026, 5, 27, 9, 40, 51, 717073))
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | SELECT ocr_run_metrics.id, ocr_run_metrics.task_id, ocr_run_metrics.owner_id, ocr_run_metrics.http_latency_ms, ocr_run_metrics.image_size_bytes, ocr_run_metrics.inference_ms, ocr_run_metrics.avg_confidence, ocr_run_metrics.image_width, ocr_run_metrics.image_height, ocr_run_metrics.created_at, ocr_run_metrics.updated_at 
+FROM ocr_run_metrics 
+WHERE ocr_run_metrics.id = $1::INTEGER
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | [cached since 783s ago] (46,)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | UPDATE ocr_tasks SET celery_task_id=$1::VARCHAR WHERE ocr_tasks.id = $2::INTEGER
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | [cached since 782.9s ago] ('50846802-48db-4877-9331-ff315ad2cb4c', 99)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | [cached since 1072s ago] ('yyy',)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | [cached since 1072s ago] (4, 20, 0)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | [cached since 1072s ago] (99, 4)
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:51 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:53 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:53 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:40:53 | INFO | sqlalchemy.engine.Engine | [cached since 1075s ago] ('yyy',)
+2026-05-27 17:40:53 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:40:53 | INFO | sqlalchemy.engine.Engine | [cached since 1075s ago] (4, 20, 0)
+2026-05-27 17:40:53 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:54 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:54 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:40:54 | INFO | sqlalchemy.engine.Engine | [cached since 1074s ago] (99, 4)
+2026-05-27 17:40:54 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:56 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:56 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:40:56 | INFO | sqlalchemy.engine.Engine | [cached since 1077s ago] ('yyy',)
+2026-05-27 17:40:56 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:40:56 | INFO | sqlalchemy.engine.Engine | [cached since 1077s ago] (4, 20, 0)
+2026-05-27 17:40:56 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:56 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:56 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:40:56 | INFO | sqlalchemy.engine.Engine | [cached since 1077s ago] (99, 4)
+2026-05-27 17:40:56 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:58 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:58 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:40:58 | INFO | sqlalchemy.engine.Engine | [cached since 1079s ago] ('yyy',)
+2026-05-27 17:40:58 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:40:58 | INFO | sqlalchemy.engine.Engine | [cached since 1079s ago] (4, 20, 0)
+2026-05-27 17:40:58 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:58 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:58 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:40:58 | INFO | sqlalchemy.engine.Engine | [cached since 1079s ago] (99, 4)
+2026-05-27 17:40:58 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | [cached since 1080s ago] ('yyy',)
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | INSERT INTO ocr_tasks (celery_task_id, filename, file_path, status, created_at, completed_at, result, correction_log, model_version, inference_ms, avg_confidence, image_width, image_height, owner_id) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::taskstatus, $5::TIMESTAMP WITHOUT TIME ZONE, $6::TIMESTAMP WITHOUT TIME ZONE, $7::VARCHAR, $8::VARCHAR, $9::VARCHAR, $10::FLOAT, $11::FLOAT, $12::INTEGER, $13::INTEGER, $14::INTEGER) RETURNING ocr_tasks.id
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | [cached since 791.2s ago] (None, '截图1.jpg', '6fa437d6-11c4-4663-a413-8975ac3c2c02.jpg', 'PENDING', datetime.datetime(2026, 5, 27, 9, 40, 59, 794211), None, None, None, None, None, None, None, None, 4)
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | [cached since 791.2s ago] (100,)
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | SELECT ocr_run_metrics.id, ocr_run_metrics.task_id, ocr_run_metrics.owner_id, ocr_run_metrics.http_latency_ms, ocr_run_metrics.image_size_bytes, ocr_run_metrics.inference_ms, ocr_run_metrics.avg_confidence, ocr_run_metrics.image_width, ocr_run_metrics.image_height, ocr_run_metrics.created_at, ocr_run_metrics.updated_at 
+FROM ocr_run_metrics 
+WHERE ocr_run_metrics.task_id = $1::INTEGER
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | [cached since 791.2s ago] (100,)
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | INSERT INTO ocr_run_metrics (task_id, owner_id, http_latency_ms, image_size_bytes, inference_ms, avg_confidence, image_width, image_height, created_at, updated_at) VALUES ($1::INTEGER, $2::INTEGER, $3::FLOAT, $4::INTEGER, $5::FLOAT, $6::FLOAT, $7::INTEGER, $8::INTEGER, $9::TIMESTAMP WITHOUT TIME ZONE, $10::TIMESTAMP WITHOUT TIME ZONE) RETURNING ocr_run_metrics.id
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | [cached since 791.2s ago] (100, 4, 45.70349998539314, 234247, None, None, None, None, datetime.datetime(2026, 5, 27, 9, 40, 59, 907020), datetime.datetime(2026, 5, 27, 9, 40, 59, 907020))
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | SELECT ocr_run_metrics.id, ocr_run_metrics.task_id, ocr_run_metrics.owner_id, ocr_run_metrics.http_latency_ms, ocr_run_metrics.image_size_bytes, ocr_run_metrics.inference_ms, ocr_run_metrics.avg_confidence, ocr_run_metrics.image_width, ocr_run_metrics.image_height, ocr_run_metrics.created_at, ocr_run_metrics.updated_at 
+FROM ocr_run_metrics 
+WHERE ocr_run_metrics.id = $1::INTEGER
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | [cached since 791.2s ago] (47,)
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | UPDATE ocr_tasks SET celery_task_id=$1::VARCHAR WHERE ocr_tasks.id = $2::INTEGER
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | [cached since 791.1s ago] ('21a8ecf6-399f-49d9-86ff-f7cde5183144', 100)
+2026-05-27 17:40:59 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | [cached since 1081s ago] ('yyy',)
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | [cached since 1081s ago] (4, 20, 0)
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | [cached since 1081s ago] (100, 4)
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | [cached since 1081s ago] (100, 4)
+2026-05-27 17:41:00 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:01 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:01 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:01 | INFO | sqlalchemy.engine.Engine | [cached since 1082s ago] (99, 4)
+2026-05-27 17:41:01 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:02 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:02 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:02 | INFO | sqlalchemy.engine.Engine | [cached since 1083s ago] ('yyy',)
+2026-05-27 17:41:02 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:02 | INFO | sqlalchemy.engine.Engine | [cached since 1083s ago] (4, 20, 0)
+2026-05-27 17:41:02 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:02 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:02 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:02 | INFO | sqlalchemy.engine.Engine | [cached since 1083s ago] (99, 4)
+2026-05-27 17:41:02 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:04 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:04 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:04 | INFO | sqlalchemy.engine.Engine | [cached since 1085s ago] ('yyy',)
+2026-05-27 17:41:04 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:04 | INFO | sqlalchemy.engine.Engine | [cached since 1085s ago] (4, 20, 0)
+2026-05-27 17:41:04 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:04 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:04 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:04 | INFO | sqlalchemy.engine.Engine | [cached since 1085s ago] (99, 4)
+2026-05-27 17:41:04 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:06 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:06 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:06 | INFO | sqlalchemy.engine.Engine | [cached since 1087s ago] ('yyy',)
+2026-05-27 17:41:06 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:06 | INFO | sqlalchemy.engine.Engine | [cached since 1087s ago] (4, 20, 0)
+2026-05-27 17:41:06 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:06 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:06 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:06 | INFO | sqlalchemy.engine.Engine | [cached since 1087s ago] (99, 4)
+2026-05-27 17:41:06 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:08 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:08 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:08 | INFO | sqlalchemy.engine.Engine | [cached since 1089s ago] ('yyy',)
+2026-05-27 17:41:08 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:08 | INFO | sqlalchemy.engine.Engine | [cached since 1089s ago] (4, 20, 0)
+2026-05-27 17:41:08 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:08 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:08 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:08 | INFO | sqlalchemy.engine.Engine | [cached since 1089s ago] (99, 4)
+2026-05-27 17:41:08 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:10 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:10 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:10 | INFO | sqlalchemy.engine.Engine | [cached since 1091s ago] ('yyy',)
+2026-05-27 17:41:10 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:10 | INFO | sqlalchemy.engine.Engine | [cached since 1091s ago] (4, 20, 0)
+2026-05-27 17:41:10 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:10 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:10 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:10 | INFO | sqlalchemy.engine.Engine | [cached since 1091s ago] (99, 4)
+2026-05-27 17:41:10 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:12 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:12 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:12 | INFO | sqlalchemy.engine.Engine | [cached since 1093s ago] ('yyy',)
+2026-05-27 17:41:12 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:12 | INFO | sqlalchemy.engine.Engine | [cached since 1093s ago] (4, 20, 0)
+2026-05-27 17:41:12 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:12 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:12 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:12 | INFO | sqlalchemy.engine.Engine | [cached since 1093s ago] (99, 4)
+2026-05-27 17:41:12 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:14 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:14 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:14 | INFO | sqlalchemy.engine.Engine | [cached since 1095s ago] ('yyy',)
+2026-05-27 17:41:14 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:14 | INFO | sqlalchemy.engine.Engine | [cached since 1095s ago] (4, 20, 0)
+2026-05-27 17:41:14 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:14 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:14 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:14 | INFO | sqlalchemy.engine.Engine | [cached since 1095s ago] (99, 4)
+2026-05-27 17:41:14 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:16 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:16 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:16 | INFO | sqlalchemy.engine.Engine | [cached since 1097s ago] ('yyy',)
+2026-05-27 17:41:16 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:16 | INFO | sqlalchemy.engine.Engine | [cached since 1097s ago] (4, 20, 0)
+2026-05-27 17:41:16 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:16 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:16 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:16 | INFO | sqlalchemy.engine.Engine | [cached since 1097s ago] (99, 4)
+2026-05-27 17:41:16 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:19 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:19 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:19 | INFO | sqlalchemy.engine.Engine | [cached since 1100s ago] ('yyy',)
+2026-05-27 17:41:19 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:19 | INFO | sqlalchemy.engine.Engine | [cached since 1100s ago] (4, 20, 0)
+2026-05-27 17:41:19 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:19 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:19 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:19 | INFO | sqlalchemy.engine.Engine | [cached since 1100s ago] (99, 4)
+2026-05-27 17:41:19 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 1102s ago] ('yyy',)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 1102s ago] ('yyy',)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT date_trunc($1::VARCHAR, ocr_tasks.completed_at) AS bucket, avg(ocr_tasks.inference_ms) AS avg_ms, count(ocr_tasks.id) AS cnt 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $2::INTEGER AND ocr_tasks.status = $3::taskstatus AND ocr_tasks.completed_at IS NOT NULL AND ocr_tasks.completed_at >= $4::TIMESTAMP WITHOUT TIME ZONE AND ocr_tasks.inference_ms IS NOT NULL GROUP BY date_trunc($1::VARCHAR, ocr_tasks.completed_at) ORDER BY bucket
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.3s ago] ('hour', 4, 'COMPLETED', datetime.datetime(2026, 5, 26, 9, 41, 21, 129858))
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER AND (ocr_tasks.status = $2::taskstatus AND ocr_tasks.avg_confidence IS NOT NULL AND ocr_tasks.avg_confidence < $3::FLOAT OR ocr_tasks.status = $4::taskstatus) ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $5::INTEGER
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.2s ago] (4, 'COMPLETED', 0.8, 'FAILED', 30)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER AND ocr_tasks.status = $2::taskstatus AND ocr_tasks.avg_confidence IS NOT NULL AND ocr_tasks.avg_confidence < $3::FLOAT ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $4::INTEGER
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.3s ago] (4, 'COMPLETED', 0.8, 50)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.status, count(ocr_tasks.id) AS count_1 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER AND ocr_tasks.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE GROUP BY ocr_tasks.status
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.3s ago] (4, datetime.datetime(2026, 5, 26, 9, 41, 21, 153185))
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 1102s ago] ('yyy',)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 1102s ago] ('yyy',)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 1102s ago] (4, 20, 0)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.level = $1::VARCHAR AND system_logs.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.3s ago] ('ERROR', datetime.datetime(2026, 5, 26, 9, 41, 21, 239177))
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.level = $1::VARCHAR AND system_logs.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.3s ago] ('WARNING', datetime.datetime(2026, 5, 26, 9, 41, 21, 239177))
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.created_at >= $1::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.3s ago] (datetime.datetime(2026, 5, 26, 9, 41, 21, 239177),)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT data_backup_records.id, data_backup_records.filename, data_backup_records.file_path, data_backup_records.size_bytes, data_backup_records.success, data_backup_records.error_message, data_backup_records.created_by_user_id, data_backup_records.created_at 
+FROM data_backup_records ORDER BY data_backup_records.created_at DESC 
+ LIMIT $1::INTEGER
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.3s ago] (1,)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 1102s ago] ('yyy',)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT system_logs.id, system_logs.level, system_logs.source, system_logs.message, system_logs.detail, system_logs.path, system_logs.user_id, system_logs.created_at 
+FROM system_logs ORDER BY system_logs.created_at DESC 
+ LIMIT $1::INTEGER
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.2s ago] (30,)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 1102s ago] ('yyy',)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.level = $1::VARCHAR AND system_logs.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.4s ago] ('ERROR', datetime.datetime(2026, 5, 26, 9, 41, 21, 364949))
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.level = $1::VARCHAR AND system_logs.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.4s ago] ('WARNING', datetime.datetime(2026, 5, 26, 9, 41, 21, 364949))
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT count(*) AS count_1 
+FROM system_logs 
+WHERE system_logs.created_at >= $1::TIMESTAMP WITHOUT TIME ZONE
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.4s ago] (datetime.datetime(2026, 5, 26, 9, 41, 21, 364949),)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 1102s ago] ('yyy',)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT data_backup_records.id, data_backup_records.filename, data_backup_records.file_path, data_backup_records.size_bytes, data_backup_records.success, data_backup_records.error_message, data_backup_records.created_by_user_id, data_backup_records.created_at 
+FROM data_backup_records ORDER BY data_backup_records.created_at DESC 
+ LIMIT $1::INTEGER
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.4s ago] (1,)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 1102s ago] (4, 20, 0)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 1102s ago] ('yyy',)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | SELECT system_logs.id, system_logs.level, system_logs.source, system_logs.message, system_logs.detail, system_logs.path, system_logs.user_id, system_logs.created_at 
+FROM system_logs ORDER BY system_logs.created_at DESC 
+ LIMIT $1::INTEGER
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | [cached since 740.3s ago] (30,)
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:21 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:24 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:24 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:24 | INFO | sqlalchemy.engine.Engine | [cached since 1105s ago] ('yyy',)
+2026-05-27 17:41:24 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:24 | INFO | sqlalchemy.engine.Engine | [cached since 1105s ago] (4, 20, 0)
+2026-05-27 17:41:24 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:27 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:27 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:27 | INFO | sqlalchemy.engine.Engine | [cached since 1108s ago] ('yyy',)
+2026-05-27 17:41:27 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:27 | INFO | sqlalchemy.engine.Engine | [cached since 1108s ago] (4, 20, 0)
+2026-05-27 17:41:27 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | [cached since 1111s ago] ('yyy',)
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | [cached since 1111s ago] (4, 20, 0)
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | [cached since 1111s ago] ('yyy',)
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER AND ocr_tasks.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $3::INTEGER OFFSET $4::INTEGER
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | [cached since 746.8s ago] (4, datetime.datetime(2026, 5, 20, 9, 41, 30, 791998), 100, 0)
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | [cached since 1111s ago] ('yyy',)
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.owner_id = $1::INTEGER AND ocr_tasks.created_at >= $2::TIMESTAMP WITHOUT TIME ZONE ORDER BY ocr_tasks.created_at DESC 
+ LIMIT $3::INTEGER OFFSET $4::INTEGER
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | [cached since 746.8s ago] (4, datetime.datetime(2026, 5, 20, 9, 41, 30, 858852), 100, 0)
+2026-05-27 17:41:30 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | [cached since 1112s ago] (100, 4)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | [cached since 1112s ago] (99, 4)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | [cached since 1112s ago] (97, 4)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | [cached since 1112s ago] (98, 4)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | [cached since 1112s ago] (96, 4)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | [cached since 1112s ago] (95, 4)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | [cached since 1112s ago] (90, 4)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | [cached since 1112s ago] (92, 4)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | [cached since 1112s ago] (86, 4)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | [cached since 1112s ago] (87, 4)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | [cached since 1112s ago] (88, 4)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | [cached since 1112s ago] (78, 4)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | [cached since 1112s ago] (76, 4)
+2026-05-27 17:41:31 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | [cached since 1122s ago] ('yyy',)
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | [cached since 1122s ago] (99, 4)
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | UPDATE ocr_tasks SET correction_log=$1::VARCHAR WHERE ocr_tasks.id = $2::INTEGER
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | [generated in 0.00084s] ('[{"index": 35, "original": "█", "corrected": ""}]', 99)
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | [cached since 832.5s ago] (99,)
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | SELECT ocr_tasks.id, ocr_tasks.celery_task_id, ocr_tasks.filename, ocr_tasks.file_path, ocr_tasks.status, ocr_tasks.created_at, ocr_tasks.completed_at, ocr_tasks.result, ocr_tasks.correction_log, ocr_tasks.model_version, ocr_tasks.inference_ms, ocr_tasks.avg_confidence, ocr_tasks.image_width, ocr_tasks.image_height, ocr_tasks.owner_id 
+FROM ocr_tasks 
+WHERE ocr_tasks.id = $1::INTEGER AND ocr_tasks.owner_id = $2::INTEGER
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | [cached since 1122s ago] (99, 4)
+2026-05-27 17:41:41 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-05-27 19:22:14 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-05-27 19:22:14 | INFO | sqlalchemy.engine.Engine | SELECT users.id, users.email, users.username, users.hashed_password, users.is_active, users.created_at 
+FROM users 
+WHERE users.username = $1::VARCHAR
+2026-05-27 19:22:14 | INFO | sqlalchemy.engine.Engine | [cached since 7155s ago] ('yyy',)
+2026-05-27 19:22:14 | INFO | sqlalchemy.engine.Engine | ROLLBACK
